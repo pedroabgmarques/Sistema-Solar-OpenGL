@@ -1,7 +1,7 @@
 
 #include "Solar.h"   
 #include <stdlib.h> 
-#include <GL/glut.h>	
+#include "GL/glut.h"
 #include "planeta.h"
 
 
@@ -11,30 +11,6 @@ const int numeroPlanetas = 8;
 Planeta sistemasolar[numeroPlanetas];
 int MoveX = 0;
 int MoveY = 0;
-
-
-
-
-// Controlo do estado e velocidade das animacoes
-static float HourOfDay = 0.0;
-static float DayOfYear = 0.0;
-static float HourOfDay2 = 0.0;
-static float DayOfYear2 = 0.0;
-static float HourOfDay3 = 0.0;
-static float DayOfYear3 = 0.0;
-static float HourOfDay4 = 0.0;
-static float DayOfYear4 = 0.0;
-static float HourOfDay5 = 0.0;
-static float DayOfYear5 = 0.0;
-static float HourOfDay6 = 0.0;
-static float DayOfYear6 = 0.0;
-static float HourOfDay7 = 0.0;
-static float DayOfYear7 = 0.0;
-static float HourOfDay8 = 0.0;
-static float DayOfYear8 = 0.0;
-
-static float AnimateIncrement = 24.0;  // tempo para animacoes (horas)
-static void initLights(void);
 
 static void KeyPressFunc(unsigned char Key, int x, int y)
 {
@@ -85,28 +61,22 @@ static void Key_s(void)
 
 static void Key_up(void)
 {
-	AnimateIncrement *= 1.5;			// duplica a velocidade da animaçao
+	
 }
 
 static void Key_down(void)
 {
-	AnimateIncrement /= 2.0;			// reduz a velocidade da animaçao
+	
 
 }
 static void initLights(void)
 {
 	// Define a luz ambiente global
-	GLfloat global_ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
+	GLfloat global_ambient[] = { 0.01f, 0.01f, 0.01f, 1.0f };
 	// Define a luz light0. Existem 8 fontes de luz no total.
-	GLfloat light0_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-	GLfloat light0_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	GLfloat light0_ambient[] = { 0.02f, 0.02f, 0.02f, 1.0f };
+	GLfloat light0_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat light0_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	// Define a luz light1. Existem 8 fontes de luz no total.
-	GLfloat light1_ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
-	GLfloat light1_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat light1_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	GLfloat spot_angle = 45.0f;
-	GLfloat spot_exp = 12.0f; // Maior valor = maior concentração de luz no centro
 
 	// Fonte de luz ambiente
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
@@ -116,191 +86,104 @@ static void initLights(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05);
-	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.05);
+	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.005);
+	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.005);
+	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.005);
 
-	// Fonte de luz cónica
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, spot_angle);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, spot_exp);
-
-	// Activa a utilização de iluminação
-	glEnable(GL_LIGHTING);
-	// Activa a fonte de luz light0
 	glEnable(GL_LIGHT0);
-	// Activa a fonte de luz light1
-	glEnable(GL_LIGHT1);
+
+
 }
+
+void applyLights(){
+	// Define a posição de light0
+	GLfloat light0_position[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	// Aplica a light0
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+
+	// Desenha uma esfera que sinaliza a posição da light0
+	/*glDisable(GL_LIGHTING);
+	glPushMatrix();
+	glColor3f(1.0, 0.0, 0.0);
+	glTranslatef(0.0f, 0.0f, 0.0f);
+	glutSolidSphere(1.9, 20, 20);
+	glPopMatrix();*/
+
+	glEnable(GL_LIGHTING);
+}
+
+void applymaterial(int type)
+{
+	// Define as propriedades dos materiais
+	// Type: 0 (Branco); 1 (Amarelo); 2 (Ciano); 3 (Branco-Emissor)
+	GLfloat mat_ambient[4][4] = { { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } };
+	GLfloat mat_diffuse[4][4] = { { 0.5f, 0.5f, 0.5f, 1.0f }, { 0.5f, 0.5f, 0.0f, 1.0f }, { 0.0f, 0.5f, 0.5f, 1.0f }, { 0.5f, 0.5f, 0.5f, 1.0f } };
+	GLfloat mat_specular[4][4] = { { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } };
+	GLfloat mat_emission[4][4] = { { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } };
+	GLfloat mat_shininess[4][1] = { { 20.0f }, { 20.0f }, { 20.0f }, { 20.0f } };
+
+	if ((type >= 0) && (type < 4))
+	{
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient[type]); // GL_FRONT, GL_FRONT_AND_BACK , GL_BACK, 
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse[type]);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular[type]);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, mat_emission[type]);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mat_shininess[type]);
+	}
+}
+
+
+void UpdatePlanetas(){
+	for (int i = 0; i < numeroPlanetas; i++){
+		sistemasolar[i].Update();
+	}
+}
+
+void DrawPlanetas(){
+	for (int i = numeroPlanetas; i > -1; i--){
+
+		glPushMatrix();
+
+		glTranslatef(
+			sistemasolar[i].GetX(), 
+			0.0,
+			sistemasolar[i].GetZ());
+		//Se é o sol, material emissive
+		if (i == 0){
+			applymaterial(3);
+		}
+		else{
+			applymaterial(0);
+		}
+		glutSolidSphere(sistemasolar[i].GetRaioPlaneta(), 64, 64);
+
+		glPopMatrix();
+	}
+}
+
 //isto pode ou nao ser alterado
 static void Animate(void)
 {
 	// limpa a janela
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (spinMode) {
-		// update da animaçao
-		HourOfDay += AnimateIncrement;
-		DayOfYear += AnimateIncrement / 30.0;
-
-		HourOfDay = HourOfDay - ((int)(HourOfDay / 24)) * 24;
-		DayOfYear = DayOfYear - ((int)(DayOfYear / 365)) * 365;
-
-		HourOfDay2 = HourOfDay2 - ((int)(HourOfDay2 / 36)) * 36;
-		DayOfYear2 = DayOfYear2 - ((int)(DayOfYear2 / 400)) * 400;
-
-		HourOfDay3 = HourOfDay3 - ((int)(HourOfDay3 / 36)) * 36;
-		DayOfYear3 = DayOfYear3 - ((int)(DayOfYear3 / 400)) * 400;
-
-		HourOfDay4 = HourOfDay4 - ((int)(HourOfDay4 / 36)) * 36;
-		DayOfYear4 = DayOfYear4 - ((int)(DayOfYear4 / 400)) * 400;
-
-		HourOfDay5 = HourOfDay5 - ((int)(HourOfDay5 / 36)) * 36;
-		DayOfYear5 = DayOfYear5 - ((int)(DayOfYear5 / 400)) * 400;
-
-		HourOfDay6 = HourOfDay6 - ((int)(HourOfDay6 / 36)) * 36;
-		DayOfYear6 = DayOfYear6 - ((int)(DayOfYear6 / 400)) * 400;
-
-		HourOfDay7 = HourOfDay7 - ((int)(HourOfDay7 / 36)) * 36;
-		DayOfYear7 = DayOfYear7 - ((int)(DayOfYear7 / 400)) * 400;
-
-		HourOfDay8 = HourOfDay8 - ((int)(HourOfDay8 / 36)) * 36;
-		DayOfYear8 = DayOfYear8 - ((int)(DayOfYear8 / 400)) * 400;
-
-	}
-
 	glLoadIdentity();
-	/*
+	
 	// reduz 8 unidades para ver da origem
-	glTranslatef(0.0, 0.0, -10.0);
+	glTranslatef(0.0, 0.0, -30.0);
+	glRotatef(25.0, 1.0, 0.0, 0.0);
 
-	//roda o plano epiliticamente
-	// (roda sobreo x do modelo em 15 graus)
-	glRotatef(225.0, 1.0, 0.0, 0.0);
-
-
-	
-	// desenhar sol	-- amarelo em wireframe
-	glRotatef(360.0*DayOfYear / 365.0, 0.0, 1.0, 0.0);
-	glColor3f(1.0, 1.0, 0.0);
-	glutSolidSphere(2.5, 15, 15);
-
-
-	glPopMatrix();
-
-
-
-	// desenha terra
-	//		usa o dia do ano para determinar a sua posicao
-	glRotatef(360.0*DayOfYear2 / 365.0, 1.0, 1.0, 0.0);
-	glTranslatef(3.0, 0.0, 0.0);
-	glPushMatrix();
-	// roda a terra sobre o seu eixo
-	//		usa a hora do dia para determinar a sua posicao
-	glRotatef(24.0*HourOfDay2 / 24.0, 0.0, 1.0, 0.0);
-	// desenha a terra numa esferea em wireframe
-	glColor3f(0.2, 0.2, 1.0);
-	glutWireSphere(0.2, 20, 20);
-
-	glPopMatrix();
-
-	glRotatef(480 * DayOfYear8 / 480.0, 1.0, 1.0, 0.0);
-	glTranslatef(1.0, 0.0, 0.0);
-	glPushMatrix();
-	glRotatef(36 * HourOfDay8 / 36.0, 0.0, 1.0, 0.0);
-	glColor3f(0.5, 0.2, 1.0);
-	glutWireSphere(0.2, 20, 20);
-
-	glPopMatrix();
-
-
-	//2 planeta
-	glRotatef(480 * DayOfYear3 / 480.0, 1.0, 1.0, 0.0);
-	glTranslatef(2.0, 0.0, 0.0);
-	glPushMatrix();
-	glRotatef(36 * HourOfDay3 / 36.0, 0.0, 1.0, 0.0);
-	glColor3f(0.5, 0.2, 1.0);
-	glutWireSphere(0.2, 20, 20);
-
-	glPopMatrix();
-	//3 planeta
-	glRotatef(480 * DayOfYear4 / 480.0, 1.0, 1.0, 0.0);
-	glTranslatef(3.0, 0.0, 0.0);
-	glPushMatrix();
-	glRotatef(36 * HourOfDay4 / 36.0, 0.0, 1.0, 0.0);
-	glColor3f(0.5, 0.2, 1.0);
-	glutWireSphere(0.2, 10, 10);
-
-	glPopMatrix();
-
-	//4 planeta
-	glRotatef(480 * DayOfYear5 / 480.0, 1.0, 1.0, 0.0);
-	glTranslatef(4.0, 0.0, 0.0);
-	glPushMatrix();
-	glRotatef(36 * HourOfDay5 / 36.0, 0.0, 1.0, 0.0);
-	glColor3f(0.5, 0.2, 1.0);
-	glutWireSphere(0.2, 10, 10);
-
-	glPopMatrix();
-
-	//5 planeta
-	glRotatef(480 * DayOfYear6 / 480.0, 1.0, 1.0, 0.0);
-	glTranslatef(5.0, 0.0, 0.0);
-	glPushMatrix();
-	glRotatef(36 * HourOfDay6 / 36.0, 0.0, 1.0, 0.0);
-	glColor3f(0.5, 0.2, 1.0);
-	glutWireSphere(0.2, 10, 10);
-
-	glPopMatrix();
-
-
-	//6 planeta
-	glRotatef(480 * DayOfYear7 / 480.0, 1.0, 1.0, 0.0);
-	glTranslatef(6.0, 0.0, 0.0);
-	glPushMatrix();
-	glRotatef(36 * HourOfDay7 / 36.0, 0.0, 1.0, 0.0);
-	glColor3f(0.5, 0.2, 1.0);
-	glutWireSphere(0.2, 10, 10);
-
-	glPopMatrix();
-
-	/*
-	glColor3f(0.0, 1.0, 0.5);
-	gluLookAt(0.0, 10.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	if (MoveY == 720)
-		MoveY = 0;
-	glTranslatef(-4.0, 0.0, 0.0);
-	glRotatef(36 * HourOfDay7 / 36.0, 0.0, 1.0, 0.0);
-	glutWireSphere(0.2, 10, 10);
-	int i = 0;
-	glBegin(GL_LINE_STRIP);
-	//glBegin(GL_QUAD_STRIP);
-	glColor3f(0.0, 1.0, 0.7);
-	for (i = 0; i <= 360; i++)
-	{
-		glVertex3f(sin(i*3.1416 / 180) * 1, cos(i*3.1416 / 180) * 1, 0);
-		glVertex3f(sin(i*3.1416 / 180)*1.2, cos(i*3.1416 / 180)*1.2, 0);
+	if (spinMode) {
+		//Atualiza a posição dos planetas
+		UpdatePlanetas();
 	}
-	
-	glPopMatrix();
 
-	*/
+	applyLights();
 
-	
-	
+	//Desenha os planetas
+	DrawPlanetas();
 
-	//desenha  a lua
-	//usa a hora do dia para determinar a sua posicao
-
-	glRotatef(360.0*12.0*DayOfYear / 365.0, 0.0, 1.0, 0.0);
-	glTranslatef(0.7, 0.0, 0.0);
-	glColor3f(0.3, 0.7, 0.3);
-	glutWireSphere(0.05, 5, 5);
-
-	glPopMatrix();
-	// troca os buffers
 	glFlush();
 	glutSwapBuffers();
 
@@ -316,10 +199,12 @@ static void Animate(void)
 // Initialize OpenGL's rendering modes
 void OpenGLInit(void)
 {
-	glShadeModel(GL_CLAMP);
+	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glClearDepth(1.0);
-	glEnable(GL_DEPTH_RANGE);
+	glPolygonMode(GL_FRONT, GL_FILL); // GL_LINE, GL_POINT, GL_FILL
+
+	// Activa o teste de profundidade
+	glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -334,7 +219,7 @@ static void ResizeWindow(int w, int h)
 	// prepara a vista da matrix (nao muito bem!)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(100.0, aspectRatio, 1, 45.0);
+	gluPerspective(60.0, aspectRatio, 1, 300);
 
 	// seleciona o modelo de vista da matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -342,42 +227,41 @@ static void ResizeWindow(int w, int h)
 void initSistemaSolar()
 {
 
-	Planeta terra;
-	terra.SetValues(0.1, 1.0, 1.0);
-	sistemasolar[0] = terra;
+	Planeta sol;
+	sol.SetValues(0, 2, 1.0);
+	sistemasolar[0] = sol;
 
 	Planeta mercurio;
-	mercurio.SetValues(0.1, 1.0, 1.0);
+	mercurio.SetValues(3.5, 0.2, 1.0);
 	sistemasolar[1] = mercurio;
-	
+
 	Planeta venus;
-	venus.SetValues(0.1, 1.0, 1.0);
+	venus.SetValues(5, 0.4, 1.0);
 	sistemasolar[2] = venus;
 
+	Planeta terra;
+	terra.SetValues(9, 1.0, 1.0);
+	sistemasolar[3] = terra;
+
 	Planeta marte;
-	marte.SetValues(0.1, 1.0, 1.0);
-	sistemasolar[3] = marte;
+	marte.SetValues(12, 0.8, 1.0);
+	sistemasolar[4] = marte;
 
 	Planeta jupiter;
-	jupiter.SetValues(0.1, 1.0, 1.0);
-	sistemasolar[4] = jupiter;
+	jupiter.SetValues(17, 1.5, 1.0);
+	sistemasolar[5] = jupiter;
 
 	Planeta saturno;
-	saturno.SetValues(0.1, 1.0, 1.0);
-	sistemasolar[5] = saturno;
+	saturno.SetValues(25, 1.2, 1.0);
+	sistemasolar[6] = saturno;
 
 	Planeta urano;
-	urano.SetValues(0.1, 1.0, 1.0);
-	sistemasolar[6] = urano;
+	urano.SetValues(30, 1.1, 1.0);
+	sistemasolar[7] = urano;
 
 	Planeta neptuno;
-	neptuno.SetValues(0.1, 1.0, 1.0);
-	sistemasolar[7] = neptuno;
-
-	Planeta mercurio;
-	mercurio.SetValues(0.1, 1.0, 1.0);
-	sistemasolar[7] = mercurio;
-	//depois acabar
+	neptuno.SetValues(17, 1.0, 1.0);
+	sistemasolar[8] = neptuno;
 
 }
 
@@ -386,7 +270,7 @@ int main(int argc, char** argv)
 {
 
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_RGBA);
 
 
 	glutInitWindowPosition(0, 0);
@@ -401,12 +285,8 @@ int main(int argc, char** argv)
 
 	glutKeyboardFunc(KeyPressFunc);
 	glutSpecialFunc(SpecialKeyFunc);
-
 	glutReshapeFunc(ResizeWindow);
-
 	glutDisplayFunc(Animate);
-
-
 	glutMainLoop();
 
 	return(0);
