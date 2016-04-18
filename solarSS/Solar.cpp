@@ -1,8 +1,14 @@
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_NONSTDC_NO_DEPRECATE
 
 #include "Solar.h"   
 #include <stdlib.h> 
+#include <stdio.h>
 #include "GL/glut.h"
 #include "planeta.h"
+#include "tga.h"
+#include <string>
+#include <vector>
 
 
 static GLenum spinMode = GL_TRUE;
@@ -11,6 +17,9 @@ const int numeroPlanetas = 8;
 Planeta sistemasolar[numeroPlanetas];
 int MoveX = 0;
 int MoveY = 0;
+GLuint textures[numeroPlanetas];
+tgaInfo *im;
+GLUquadric *mysolid;
 
 static void KeyPressFunc(unsigned char Key, int x, int y)
 {
@@ -74,7 +83,7 @@ static void initLights(void)
 	// Define a luz ambiente global
 	GLfloat global_ambient[] = { 0.01f, 0.01f, 0.01f, 1.0f };
 	// Define a luz light0. Existem 8 fontes de luz no total.
-	GLfloat light0_ambient[] = { 0.02f, 0.02f, 0.02f, 1.0f };
+	GLfloat light0_ambient[] = { 0.05f, 0.05f, 0.05f, 1.0f };
 	GLfloat light0_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	GLfloat light0_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
@@ -101,14 +110,6 @@ void applyLights(){
 
 	// Aplica a light0
 	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-
-	// Desenha uma esfera que sinaliza a posição da light0
-	/*glDisable(GL_LIGHTING);
-	glPushMatrix();
-	glColor3f(1.0, 0.0, 0.0);
-	glTranslatef(0.0f, 0.0f, 0.0f);
-	glutSolidSphere(1.9, 20, 20);
-	glPopMatrix();*/
 
 	glEnable(GL_LIGHTING);
 }
@@ -143,12 +144,6 @@ void UpdatePlanetas(){
 void DrawPlanetas(){
 	for (int i = numeroPlanetas; i > -1; i--){
 
-		glPushMatrix();
-
-		glTranslatef(
-			sistemasolar[i].GetX(), 
-			0.0,
-			sistemasolar[i].GetZ());
 		//Se é o sol, material emissive
 		if (i == 0){
 			applymaterial(3);
@@ -156,9 +151,9 @@ void DrawPlanetas(){
 		else{
 			applymaterial(0);
 		}
-		glutSolidSphere(sistemasolar[i].GetRaioPlaneta(), 64, 64);
 
-		glPopMatrix();
+		sistemasolar[i].Draw(mysolid);
+		
 	}
 }
 
@@ -170,14 +165,17 @@ static void Animate(void)
 
 	glLoadIdentity();
 	
-	// reduz 8 unidades para ver da origem
+	//Puxa a camara para trás
 	glTranslatef(0.0, 0.0, -30.0);
+	//inclinação da camara
 	glRotatef(25.0, 1.0, 0.0, 0.0);
 
 	if (spinMode) {
 		//Atualiza a posição dos planetas
 		UpdatePlanetas();
 	}
+
+	glEnable(GL_TEXTURE_2D);
 
 	applyLights();
 
@@ -224,46 +222,95 @@ static void ResizeWindow(int w, int h)
 	// seleciona o modelo de vista da matrix
 	glMatrixMode(GL_MODELVIEW);
 }
+
+void load_tga_image(std::string nome, GLuint texture)
+{
+	std::string impathfile = "textures/" + nome + ".tga";
+
+	std::vector<char> writable(impathfile.begin(), impathfile.end());
+	writable.push_back('\0');
+
+	// Carrega a imagem de textura
+	im = tgaLoad(&writable[0]);
+
+	printf("IMAGE INFO: %s\nstatus: %d\ntype: %d\npixelDepth: %d\nsize%d x %d\n", impathfile, im->status, im->type, im->pixelDepth, im->width, im->height);
+
+	// select our current texture
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	//	// set up quadric object and turn on FILL draw style for it
+	mysolid = gluNewQuadric();
+	gluQuadricDrawStyle(mysolid, GLU_FILL);
+
+	//	// turn on texture coordinate generator for the quadric
+	gluQuadricTexture(mysolid, GL_TRUE);
+
+	// select modulate to mix texture with color for shading
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // MIPMAP
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// build our texture mipmaps
+	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, im->width, im->height, GL_RGB, GL_UNSIGNED_BYTE, im->imageData); // MIPMAP
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im->width, im->height, 0, GL_RGB, GL_UNSIGNED_BYTE, im->imageData);
+
+	// Destroi a imagem
+	tgaDestroy(im);
+}
+
 void initSistemaSolar()
 {
 
 	Planeta sol;
-	sol.SetValues(0, 2, 1.0);
+	sol.SetValues(0, 2, 0.01, textures[0]);
+	load_tga_image("sun", textures[0]);
 	sistemasolar[0] = sol;
 
 	Planeta mercurio;
-	mercurio.SetValues(3.5, 0.2, 1.0);
+	mercurio.SetValues(3.5, 0.8, 0.03, textures[1]);
+	load_tga_image("mercury", textures[1]);
 	sistemasolar[1] = mercurio;
 
 	Planeta venus;
-	venus.SetValues(5, 0.4, 1.0);
+	venus.SetValues(5, 0.4, 0.07, textures[2]);
+	load_tga_image("venus", textures[2]);
 	sistemasolar[2] = venus;
 
 	Planeta terra;
-	terra.SetValues(9, 1.0, 1.0);
+	terra.SetValues(9, 1.0, 0.05, textures[3]);
+	load_tga_image("earth", textures[3]);
 	sistemasolar[3] = terra;
 
 	Planeta marte;
-	marte.SetValues(12, 0.8, 1.0);
+	marte.SetValues(12, 0.8, 0.4, textures[4]);
+	load_tga_image("mars", textures[4]);
 	sistemasolar[4] = marte;
 
 	Planeta jupiter;
-	jupiter.SetValues(17, 1.5, 1.0);
+	jupiter.SetValues(17, 1.5, 0.1, textures[5]);
+	load_tga_image("jupiter", textures[5]);
 	sistemasolar[5] = jupiter;
 
 	Planeta saturno;
-	saturno.SetValues(25, 1.2, 1.0);
+	saturno.SetValues(25, 1.2, 0.1, textures[6]);
+	load_tga_image("saturn", textures[6]);
 	sistemasolar[6] = saturno;
 
 	Planeta urano;
-	urano.SetValues(30, 1.1, 1.0);
+	urano.SetValues(30, 1.1, 0.2, textures[7]);
+	load_tga_image("uranus", textures[7]);
 	sistemasolar[7] = urano;
 
 	Planeta neptuno;
-	neptuno.SetValues(17, 1.0, 1.0);
+	neptuno.SetValues(17, 1.0, 0.2, textures[8]);
+	load_tga_image("neptune", textures[8]);
 	sistemasolar[8] = neptuno;
 
 }
+
+
 
 //rota principal
 int main(int argc, char** argv)
@@ -280,6 +327,8 @@ int main(int argc, char** argv)
 
 
 	OpenGLInit();
+	
+	glGenTextures(numeroPlanetas, textures);
 	initSistemaSolar();
 	initLights();
 
