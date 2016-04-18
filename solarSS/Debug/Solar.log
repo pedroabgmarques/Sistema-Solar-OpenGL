@@ -1,0 +1,18 @@
+﻿Build started 18/04/2016 18:24:26.
+     1>Project "C:\Users\vitor\Desktop\solarSS\Solar.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /Gy- /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Debug\\" /Fd".\Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt planeta.cpp
+         planeta.cpp
+     1>c:\users\vitor\desktop\solarss\planeta.h(6): error C2146: syntax error : missing ';' before identifier '_textura'
+     1>c:\users\vitor\desktop\solarss\planeta.h(6): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+     1>c:\users\vitor\desktop\solarss\planeta.h(11): error C2061: syntax error : identifier 'GLuint'
+     1>c:\users\vitor\desktop\solarss\planeta.cpp(5): error C2511: 'void Planeta::SetValues(float,float,GLuint)' : overloaded member function not found in 'Planeta'
+                 c:\users\vitor\desktop\solarss\planeta.h(4) : see declaration of 'Planeta'
+     1>c:\users\vitor\desktop\solarss\planeta.cpp(6): error C2597: illegal reference to non-static member 'Planeta::_distanciaSol'
+     1>c:\users\vitor\desktop\solarss\planeta.cpp(7): error C2597: illegal reference to non-static member 'Planeta::_raioPlaneta'
+     1>c:\users\vitor\desktop\solarss\planeta.cpp(8): error C2065: '_textura' : undeclared identifier
+     1>Done Building Project "C:\Users\vitor\Desktop\solarSS\Solar.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.25
