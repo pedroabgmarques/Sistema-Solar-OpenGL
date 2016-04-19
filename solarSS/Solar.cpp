@@ -257,7 +257,7 @@ void load_tga_image(std::string nome, GLuint texture)
 	// Carrega a imagem de textura
 	im = tgaLoad(&writable[0]);
 
-	printf("IMAGE INFO: %s\nstatus: %d\ntype: %d\npixelDepth: %d\nsize%d x %d\n", impathfile, im->status, im->type, im->pixelDepth, im->width, im->height);
+	//printf("IMAGE INFO: %s\nstatus: %d\ntype: %d\npixelDepth: %d\nsize%d x %d\n", impathfile, im->status, im->type, im->pixelDepth, im->width, im->height);
 
 	// select our current texture
 	glBindTexture(GL_TEXTURE_2D, texture);
