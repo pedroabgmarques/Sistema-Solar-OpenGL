@@ -95,9 +95,9 @@ static void initLights(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.005);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.005);
-	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.005);
+	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0025);
+	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0025);
+	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0025);
 
 	glEnable(GL_LIGHT0);
 
@@ -141,6 +141,23 @@ void UpdatePlanetas(){
 	}
 }
 
+void draworbit(float x, float y, float z, GLint radius)
+{
+	//glDisable(GL_LIGHTING);
+	glBegin(GL_LINE_LOOP);
+
+	for (float i = 0; i<(3.14 * 2); i += 3.14 / 360)
+
+	{
+		x = sin(i)*radius;
+		z = cos(i)*radius;
+		glVertex3f(x, 0, z);
+	}
+
+	glEnd();
+	//glEnable(GL_LIGHTING);
+}
+
 void DrawPlanetas(){
 	for (int i = numeroPlanetas; i > -1; i--){
 
@@ -153,6 +170,13 @@ void DrawPlanetas(){
 		}
 
 		sistemasolar[i].Draw(mysolid);
+
+		draworbit(
+			sistemasolar[i].GetX(), 
+			sistemasolar[i].GetY(), 
+			sistemasolar[i].GetZ(), 
+			sistemasolar[i].GetDistanciaSol()
+		);
 		
 	}
 }
@@ -269,12 +293,12 @@ void initSistemaSolar()
 	sistemasolar[0] = sol;
 
 	Planeta mercurio;
-	mercurio.SetValues(3.5, 0.8, 0.03, textures[1]);
+	mercurio.SetValues(4, 0.4, 0.03, textures[1]);
 	load_tga_image("mercury", textures[1]);
 	sistemasolar[1] = mercurio;
 
 	Planeta venus;
-	venus.SetValues(5, 0.4, 0.07, textures[2]);
+	venus.SetValues(6, 0.8, 0.07, textures[2]);
 	load_tga_image("venus", textures[2]);
 	sistemasolar[2] = venus;
 
@@ -309,7 +333,6 @@ void initSistemaSolar()
 	sistemasolar[8] = neptuno;
 
 }
-
 
 
 //rota principal
