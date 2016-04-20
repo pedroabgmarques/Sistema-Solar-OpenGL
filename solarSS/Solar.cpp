@@ -25,7 +25,7 @@ const int GLFW_WINDOW_ERROR = -2;
 int windowWidth, windowHeight;
 GLint midWindowX, midWindowY;
 
-//Opções, controladas pelo teclado
+//OpÃ§Ãµes, controladas pelo teclado
 GLenum spinMode = GL_TRUE;
 GLenum drawOrbits = GL_TRUE;
 
@@ -137,7 +137,7 @@ static void SpecialKeyFunc(int Key, int x, int y)
 static void Key_r(void)
 {
 	
-	spinMode = !spinMode;	// liga e desliga a animaçao
+	spinMode = !spinMode;	// liga e desliga a animaÃ§ao
 	
 }
 
@@ -163,21 +163,20 @@ static void initLights(void)
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
-	// Fonte de luz posicional
+// Fonte de luz posicional
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0025);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0025);
-	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0025);
-
+	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0025 /2);
+	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0025/2);
+	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0025/2);
 	glEnable(GL_LIGHT0);
 
 
 }
 
 void applyLights(){
-	// Define a posição de light0
+	// Define a posiÃ§Ã£o de light0
 	GLfloat light0_position[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	// Aplica a light0
@@ -232,7 +231,7 @@ void draworbit(float x, float y, float z, GLint radius)
 void DrawPlanetas(){
 	for (int i = numeroPlanetas; i > -1; i--){
 
-		//Se é o sol, material emissive
+		//Se Ã© o sol, material emissive
 		if (i == 0){
 			applymaterial(3);
 		}
@@ -275,7 +274,7 @@ static void Animate(void)
 	glTranslatef( -cam->getXPos(), -cam->getYPos(), -cam->getZPos() );
 	
 	if (spinMode) {
-		//Atualiza a posição dos planetas
+		//Atualiza a posiÃ§Ã£o dos planetas
 		UpdatePlanetas();
 	}
 
@@ -321,7 +320,7 @@ static void ResizeWindow(int w, int h)
 	// prepara a vista da matrix (nao muito bem!)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, aspectRatio, 1, 300);
+	gluPerspective(60.0, aspectRatio, 1, 600);
 
 	// seleciona o modelo de vista da matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -367,56 +366,62 @@ void load_tga_image(std::string nome, GLuint texture)
 void initSistemaSolar()
 {
 
-	//Parametros do método SetValues:
-	//Distancia ao sol / raio da órbita
+//Parametros do mÃ©todo SetValues:
+	//Distancia ao sol / raio da Ã³rbita
 	//Raio do planeta
-	//Velocidade de rotação
+	//Velocidade de rotaÃ§Ã£o
+	//Velocidade de periodo orbital
 	//Textura
 
+	float escalapp = 30;
+	float escalapg = 10;
+	float PeriodoOrbital = 0.0005;
+
 	Planeta sol;
-	sol.SetValues(0, 2, 0.01, textures[0]);
+	sol.SetValues(0, 1, 0.01,0, textures[0]);
 	load_tga_image("sun", textures[0]);
 	sistemasolar[0] = sol;
 
 	Planeta mercurio;
-	mercurio.SetValues(4, 0.4, 0.03, textures[1]);
+	mercurio.SetValues(4, 0.0035 * escalapp, 0, 0.2, textures[1]);
 	load_tga_image("mercury", textures[1]);
 	sistemasolar[1] = mercurio;
 
 	Planeta venus;
-	venus.SetValues(6, 0.8, 0.07, textures[2]);
+	venus.SetValues(7, 0.0087 * escalapp, 0, 0.6, textures[2]);
 	load_tga_image("venus", textures[2]);
 	sistemasolar[2] = venus;
 
 	Planeta terra;
-	terra.SetValues(9, 1.0, 0.05, textures[3]);
+	terra.SetValues(10, 0.0092*escalapp, 0, 1, textures[3]);
 	load_tga_image("earth", textures[3]);
 	sistemasolar[3] = terra;
 
 	Planeta marte;
-	marte.SetValues(12, 0.8, 0.4, textures[4]);
+	marte.SetValues(16, 0.0049*escalapp, 0, 1.9, textures[4]);
 	load_tga_image("mars", textures[4]);
 	sistemasolar[4] = marte;
 
 	Planeta jupiter;
-	jupiter.SetValues(17, 1.5, 0.1, textures[5]);
+	jupiter.SetValues(55, 0.1004*escalapg, 0, 11.9, textures[5]);
 	load_tga_image("jupiter", textures[5]);
 	sistemasolar[5] = jupiter;
 
 	Planeta saturno;
-	saturno.SetValues(25, 1.2, 0.1, textures[6]);
+	saturno.SetValues(102, 0.08369*escalapg, 0, 29.5, textures[6]);
 	load_tga_image("saturn", textures[6]);
 	sistemasolar[6] = saturno;
 
 	Planeta urano;
-	urano.SetValues(30, 1.1, 0.2, textures[7]);
+	urano.SetValues(206, 0.03644*escalapp, 0, 84.0, textures[7]);
 	load_tga_image("uranus", textures[7]);
 	sistemasolar[7] = urano;
 
 	Planeta neptuno;
-	neptuno.SetValues(17, 1.0, 0.2, textures[8]);
+	neptuno.SetValues(323, 0.03538*escalapp, 0, 164.8, textures[8]);
 	load_tga_image("neptune", textures[8]);
 	sistemasolar[8] = neptuno;
+
 
 }
 
