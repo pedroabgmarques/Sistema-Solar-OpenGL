@@ -8,12 +8,13 @@ class Planeta
 	float _raioOrbita, _raioPlaneta;
 	float x, y, z;
 	float iterator = 0;
-	float _rotacao; //velocidade de rotação
+	float _rotacao; //velocidade de rotaÃ§Ã£o
 	float _rotacaoAtual;
+	float _PeriodoOrbital;
 
 public:
 
-	void SetValues(float, float, float, GLuint);
+	void SetValues(float, float, float,float, GLuint);
 	void Draw(GLUquadric*);
 	void Update();
 	float GetDistanciaSol();
