@@ -1,5 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRT_NONSTDC_NO_DEPRECATE
+#ifndef GL_MULTISAMPLE_ARB
+#define GL_MULTISAMPLE_ARB  0x809D
+#endif
 
 #include "Solar.h"   
 #include <stdlib.h> 
@@ -38,7 +41,7 @@ string windowTitle = "Solar System Model | PMarques / VGomes | April 2016";
 // Create a FPS manager that locks to 60fps and updates the window title with stats every 3 seconds
 FpsManager fpsManager(60.0, 3.0, windowTitle);
 
-const int numeroPlanetas = 8;
+const int numeroPlanetas = 9;
 Planeta sistemasolar[numeroPlanetas];
 GLuint textures[numeroPlanetas];
 tgaInfo *im;
@@ -167,9 +170,9 @@ static void initLights(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0025 /2);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0025/2);
-	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0025/2);
+	//glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.0025 /2);
+	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.01);
+	//glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0025/2);
 	glEnable(GL_LIGHT0);
 
 
@@ -177,7 +180,7 @@ static void initLights(void)
 
 void applyLights(){
 	// Define a posição de light0
-	GLfloat light0_position[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	GLfloat light0_position[] = { 0.0f, 0.0f, 0.0f, 1.0 };
 
 	// Aplica a light0
 	glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
@@ -189,11 +192,31 @@ void applymaterial(int type)
 {
 	// Define as propriedades dos materiais
 	// Type: 0 (Branco); 1 (Amarelo); 2 (Ciano); 3 (Branco-Emissor)
-	GLfloat mat_ambient[4][4] = { { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } };
-	GLfloat mat_diffuse[4][4] = { { 0.5f, 0.5f, 0.5f, 1.0f }, { 0.5f, 0.5f, 0.0f, 1.0f }, { 0.0f, 0.5f, 0.5f, 1.0f }, { 0.5f, 0.5f, 0.5f, 1.0f } };
-	GLfloat mat_specular[4][4] = { { 1.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } };
-	GLfloat mat_emission[4][4] = { { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f, 1.0f } };
-	GLfloat mat_shininess[4][1] = { { 20.0f }, { 20.0f }, { 20.0f }, { 20.0f } };
+	GLfloat mat_ambient[4][4] = { 
+			{ 1.0f, 1.0f, 1.0f, 1.0f }, 
+			{ 1.0f, 1.0f, 0.0f, 1.0f }, 
+			{ 0.0f, 1.0f, 1.0f, 1.0f }, 
+			{ 1.0f, 1.0f, 1.0f, 1.0f } 
+	};
+	GLfloat mat_diffuse[4][4] = { 
+			{ 1.0f, 1.0f, 1.0f, 1.0f }, 
+			{ 0.5f, 0.5f, 0.0f, 1.0f }, 
+			{ 0.0f, 0.5f, 0.5f, 1.0f }, 
+			{ 1.0f, 1.0f, 1.0f, 1.0f } 
+	};
+	GLfloat mat_specular[4][4] = { 
+			{ 1.0f, 1.0f, 1.0f, 1.0f }, 
+			{ 1.0f, 1.0f, 0.0f, 1.0f }, 
+			{ 0.0f, 1.0f, 1.0f, 1.0f }, 
+			{ 1.0f, 1.0f, 1.0f, 1.0f } 
+	};
+	GLfloat mat_emission[4][4] = { 
+			{ 0.0f, 0.0f, 0.0f, 0.0f }, 
+			{ 0.0f, 0.0f, 0.0f, 0.0f }, 
+			{ 0.0f, 0.0f, 0.0f, 0.0f }, 
+			{ 1.0f, 1.0f, 1.0f, 1.0f } 
+	};
+	GLfloat mat_shininess[4][1] = { { 20.0f }, { 20.0f }, { 20.0f }, { 50.0f } };
 
 	if ((type >= 0) && (type < 4))
 	{
@@ -217,11 +240,17 @@ void draworbit(float x, float y, float z, GLint radius)
 	//glDisable(GL_LIGHTING);
 	glBegin(GL_LINE_LOOP);
 
-	for (float i = 0; i<(3.14 * 2); i += 3.14 / 360)
+	for (float i = 0; i<(3.14 * 2); i += (3.14 * 2) / 360)
 	{
+		glColor3f(1.0, 0, 0);
 		x = sin(i)*radius;
 		z = cos(i)*radius;
 		glVertex3f(x, 0, z);
+		
+		Vec3<float> normal = Vec3<float>(0 - x, 0, 0 - z);
+		normal.normalise();
+
+		glNormal3f(normal.getX(), 0, normal.getZ());
 	}
 
 	glEnd();
@@ -240,6 +269,8 @@ void DrawPlanetas(){
 		}
 
 		sistemasolar[i].Draw(mysolid);
+
+
 
 		if (drawOrbits){
 			draworbit(
@@ -292,6 +323,15 @@ static void Animate(void)
 // Initialize OpenGL's rendering modes
 void OpenGLInit(void)
 {
+
+	//Tentativa de antialiasing das linhas das órbitas
+	glEnable(GL_MULTISAMPLE_ARB);
+	glEnable(GL_LINE_SMOOTH);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glfwDisable(GLFW_MOUSE_CURSOR); // Hide the mouse cursor
 	glfwSwapInterval(0);            // Disable vsync

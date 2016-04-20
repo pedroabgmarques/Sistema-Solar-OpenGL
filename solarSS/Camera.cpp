@@ -26,12 +26,12 @@ Camera::~Camera()
 void Camera::initCamera()
 {
 	// Set position, rotation and speed values to zero
-	position = Vec3<double>(0.0, 10.0, 30.0);
+	position = Vec3<double>(0.0, 5.0, 30.0);
 	rotation = Vec3<double>(0.0, 0.0, 0);
 	speed.zero();
 
 	// How fast we move (higher values mean we move and strafe faster)
-	movementSpeedFactor = 5;
+	movementSpeedFactor = 10;
 
 	pitchSensitivity = 0.2; // How sensitive mouse movements affect looking up and down
 	yawSensitivity = 0.2; // How sensitive mouse movements affect looking left and right
