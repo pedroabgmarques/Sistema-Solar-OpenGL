@@ -5,16 +5,38 @@
 #include <stdlib.h> 
 #include <stdio.h>
 #include "GL/glut.h"
+#include "GL/glfw.h"
 #include "planeta.h"
 #include "tga.h"
 #include <string>
 #include <vector>
+#include "Camera.h"
+#include "FPSManager.hpp"
+
+// Specify default namespace for commonly used elements
+using std::string;
+using std::cout;
+using std::endl;
+
+// Define a few constants for error conditions
+const int GLFW_INIT_ERROR = -1;
+const int GLFW_WINDOW_ERROR = -2;
+
+int windowWidth, windowHeight;
+GLint midWindowX, midWindowY;
 
 //Opções, controladas pelo teclado
 GLenum spinMode = GL_TRUE;
 GLenum drawOrbits = GL_TRUE;
 
+//Camara
+Camera *cam;
 
+// Define our window title to append the FPS stats to
+string windowTitle = "Solar System Model | PMarques / VGomes | April 2016";
+
+// Create a FPS manager that locks to 60fps and updates the window title with stats every 3 seconds
+FpsManager fpsManager(60.0, 3.0, windowTitle);
 
 const int numeroPlanetas = 8;
 Planeta sistemasolar[numeroPlanetas];
@@ -22,20 +44,80 @@ GLuint textures[numeroPlanetas];
 tgaInfo *im;
 GLUquadric *mysolid;
 
-static void KeyPressFunc(unsigned char Key, int x, int y)
+// Callback function to handle keypresses
+void handleKeypress(int theKey, int theAction)
 {
-	switch (Key) {
-	case 'R':
-	case 'r':
-		Key_r();
-		break;
-	case 'O':
-	case 'o':
-		drawOrbits = !drawOrbits;
-		break;
-	case 27:	// tecla esc
-		exit(1);
+	// If a key is pressed, toggle the relevant key-press flag
+	if (theAction == GLFW_PRESS)
+	{
+		switch (theKey)
+		{
+		case 'W':
+			cam->holdingForward = true;
+			break;
+		case 'S':
+			cam->holdingBackward = true;
+			break;
+		case 'A':
+			cam->holdingLeftStrafe = true;
+			break;
+		case 'D':
+			cam->holdingRightStrafe = true;
+			break;
+		case 'Q':
+			cam->holdingUp = true;
+			break;
+		case 'E':
+			cam->holdingDown = true;
+			break;
+		default:
+			// Do nothing...
+			break;
+		}
 	}
+	else // If a key is released, toggle the relevant key-release flag
+	{
+		switch (theKey)
+		{
+		case 'W':
+			cam->holdingForward = false;
+			break;
+		case 'S':
+			cam->holdingBackward = false;
+			break;
+		case 'A':
+			cam->holdingLeftStrafe = false;
+			break;
+		case 'D':
+			cam->holdingRightStrafe = false;
+			break;
+		case 'Q':
+			cam->holdingUp = false;
+			break;
+		case 'E':
+			cam->holdingDown = false;
+			break;
+		case 'R':
+		case 'r':
+			Key_r();
+			break;
+		case 'O':
+		case 'o':
+			drawOrbits = !drawOrbits;
+			break;
+		case 27:	// tecla esc
+			exit(1);
+		default:
+			// Do nothing...
+			break;
+		}
+	}
+}
+
+// Callback function to handle mouse movements
+void handleMouseMove(int mouseX, int mouseY)
+{
+	cam->handleMouseMove(mouseX, mouseY);
 }
 
 
@@ -65,9 +147,9 @@ static void Key_up(void)
 
 static void Key_down(void)
 {
-	
-
 }
+
+
 static void initLights(void)
 {
 	// Define a luz ambiente global
@@ -180,10 +262,17 @@ static void Animate(void)
 	// limpa a janela
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//Colocar a camara na sua posição e orientação
+	// Reset the matrix
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glRotated(25.0, 1.0, 0.0, 0.0);
-	glTranslatef(0.0, -10.0, -30.0);
+ 
+	// Move the camera to our location in space
+	glRotatef(cam->getXRot(), 1.0f, 0.0f, 0.0f); // Rotate our camera on the x-axis (looking up and down)
+	glRotatef(cam->getYRot(), 0.0f, 1.0f, 0.0f); // Rotate our camera on the  y-axis (looking left and right)
+ 
+	// Translate the ModelView matrix to the position of our camera - everything should now be drawn relative
+	// to this position!
+	glTranslatef( -cam->getXPos(), -cam->getYPos(), -cam->getZPos() );
 	
 	if (spinMode) {
 		//Atualiza a posição dos planetas
@@ -197,17 +286,17 @@ static void Animate(void)
 	//Desenha os planetas
 	DrawPlanetas();
 
-	glFlush();
-	glutSwapBuffers();
-
-	glutPostRedisplay();
-	// pede um redraw para um proposito da animaçao
+	glfwSwapBuffers(); // Swap the buffers to display the scene (so we don't have to watch it being drawn!)
 
 }
 
 // Initialize OpenGL's rendering modes
 void OpenGLInit(void)
 {
+
+	glfwDisable(GLFW_MOUSE_CURSOR); // Hide the mouse cursor
+	glfwSwapInterval(0);            // Disable vsync
+
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glPolygonMode(GL_FRONT, GL_FILL); // GL_LINE, GL_POINT, GL_FILL
@@ -218,6 +307,11 @@ void OpenGLInit(void)
 
 static void ResizeWindow(int w, int h)
 {
+	windowWidth = w;
+	windowHeight = h;
+	midWindowX = windowWidth / 2; // Middle of the window horizontally
+	midWindowY = windowHeight / 2; // Middle of the window vertically
+
 	float aspectRatio;
 	h = (h == 0) ? 1 : h;
 	w = (w == 0) ? 1 : w;
@@ -331,15 +425,69 @@ void initSistemaSolar()
 int main(int argc, char** argv)
 {
 
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_RGBA);
+	//glutInit(&argc, argv);
+	//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_RGBA);
 
 
-	glutInitWindowPosition(0, 0);
-	glutCreateWindow("Sistema Solar");
-	//glutInitWindowSize(1080, 1080);
-	glutFullScreen();
+	//glutInitWindowPosition(0, 0);
+	//glutCreateWindow("Sistema Solar");
+	////glutInitWindowSize(1080, 1080);
+	//glutFullScreen();
 
+	// Frame counter and window settings variables
+	int redBits = 8, greenBits = 8, blueBits = 8;
+	int alphaBits = 8, depthBits = 24, stencilBits = 0;
+
+	// Flag to keep our main loop running
+	bool running = true;
+
+	// Initialise GLFW
+	if (!glfwInit())
+	{
+		std::cout << "Failed to initialise GLFW!" << endl;
+		glfwTerminate();
+		return GLFW_INIT_ERROR;
+	}
+
+	// get the current Desktop screen resolution and colour depth
+	GLFWvidmode desktop;
+	glfwGetDesktopMode(&desktop);
+
+	// open the window at the current Desktop resolution and colour depth
+	if (!glfwOpenWindow(
+		desktop.Width,
+		desktop.Height,
+		desktop.RedBits,
+		desktop.GreenBits,
+		desktop.BlueBits,
+		8,          // alpha bits
+		32,         // depth bits
+		0,          // stencil bits
+		GLFW_FULLSCREEN
+		)) {
+			std::cout << "Failed to open fullscreen window!" << std::endl;
+			glfwTerminate();
+			return GLFW_WINDOW_ERROR;
+	}
+
+
+	// ----- GLFW Settings -----
+
+	glfwDisable(GLFW_MOUSE_CURSOR); // Hide the mouse cursor
+
+	glfwSwapInterval(0);            // Disable vsync
+
+	// ----- Window and Projection Settings -----
+
+	// Set the window title
+	glfwSetWindowTitle("Solar System FPS Controls Mk2| r3dux.org | Dec 2012");
+
+	// Setup our viewport to be the entire size of the window
+	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
+
+	// Change to the projection matrix, reset the matrix and set up our projection
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 
 	OpenGLInit();
 	
@@ -347,11 +495,48 @@ int main(int argc, char** argv)
 	initSistemaSolar();
 	initLights();
 
-	glutKeyboardFunc(KeyPressFunc);
-	glutSpecialFunc(SpecialKeyFunc);
-	glutReshapeFunc(ResizeWindow);
-	glutDisplayFunc(Animate);
-	glutMainLoop();
+	// Instantiate our pointer to a Camera object providing it the size of the window
+	cam = new Camera(windowWidth, windowHeight);
+
+	// Set the mouse cursor to the centre of our window
+	glfwSetMousePos(midWindowX, midWindowY);
+	//Handle keyboard events
+	glfwSetKeyCallback(handleKeypress);
+	// Specify the function which should execute when the mouse is moved
+	glfwSetMousePosCallback(handleMouseMove);
+	glfwSetWindowSizeCallback(ResizeWindow);
+
+	//glutKeyboardFunc(handleKeypress);
+	//glutSpecialFunc(SpecialKeyFunc);
+	//glutReshapeFunc(ResizeWindow);
+	//glutDisplayFunc(Animate);
+
+	// The deltaTime variable keeps track of how much time has elapsed between one frame and the next.
+	// This allows us to perform framerate independent movement i.e. the camera will move at the same
+	// overall speed regardless of whether the app's running at (for example) 6fps, 60fps or 600fps!
+	double deltaTime = 0.0;
+
+	std::cout << "Running!" << std::endl;
+
+	while (running)
+	{
+		// Calculate our camera movement
+		cam->move(deltaTime);
+
+		// Draw our scene
+		Animate();
+
+		// exit if ESC was pressed or window was closed
+		running = !glfwGetKey(GLFW_KEY_ESC) && glfwGetWindowParam(GLFW_OPENED);
+
+		// Call our fpsManager to limit the FPS and get the frame duration to pass to the cam->move method
+		deltaTime = fpsManager.enforceFPS();
+	}
+
+	// Clean up GLFW and exit
+	glfwTerminate();
+
+	delete cam; // Delete our pointer to the camera object
 
 	return(0);
 }
