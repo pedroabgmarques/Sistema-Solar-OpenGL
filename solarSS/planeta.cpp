@@ -2,11 +2,12 @@
 #include "GL/glut.h"
 #include <math.h>
 
-void Planeta::SetValues(float distanciaSol, float raioPlaneta, float rotacao, GLuint textura)
+void Planeta::SetValues(float distanciaSol, float raioPlaneta, float rotacao,float periodoOrbital, GLuint textura)
 {
 	_raioOrbita = distanciaSol;
 	_raioPlaneta = raioPlaneta;
 	_rotacao = rotacao;
+	_PeriodoOrbital = periodoOrbital;
 	_rotacaoAtual = 0;
 	_textura = textura;
 	x, y, z = 0;
@@ -24,7 +25,7 @@ void Planeta::Draw(GLUquadric *mysolid)
 		0.0,
 		z);
 
-	//Rotação sobre si próprio
+	//RotaÃ§Ã£o sobre si prÃ³prio
 	glRotatef(_rotacaoAtual, 0.0, 1.0, 0.0);
 
 	//Endireitar os planetas
@@ -36,26 +37,28 @@ void Planeta::Draw(GLUquadric *mysolid)
 }
 
 void Planeta::Update(){
-
-	//Cálculo do movimento de trabslação do planeta em volta do sol
+	//CÃ¡lculo do movimento de trabslaÃ§Ã£o do planeta em volta do sol
 	x = sin(iterator) * _raioOrbita;
 	z = cos(iterator) * _raioOrbita;
 
 	//Esta linha define a velocidade orbital
-	iterator += 3.14 / (45 * _raioOrbita);
+	iterator += 3.14*2 / (600 *_PeriodoOrbital);
 	if (iterator >= 3.14 * 2) 
 	{
 		//Demos uma volta completa ao sol (um ano)
 		iterator = 0;
 	}
 
-	//Cálculo do movimento de rotação em torno do seu eixo
+	//CÃ¡lculo do movimento de rotaÃ§Ã£o em torno do seu eixo
 	_rotacaoAtual += _rotacao * 32;
 	if (_rotacaoAtual > 360)
 	{
 		//Demos uma volta completa (um dia)
 		_rotacaoAtual = _rotacao - 360;
 	}
+
+
+	
 }
 
 float Planeta::GetDistanciaSol(){
