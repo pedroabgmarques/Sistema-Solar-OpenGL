@@ -1,32 +1,31 @@
-﻿Build started 4/19/2016 1:54:51 AM.
+﻿Build started 4/19/2016 10:33:49 PM.
      1>Project "C:\Users\nlopes\Documents\IPCA\EDJD\2º Ano\2º Semestre\Programação 3D\SistemaSolar\solarSS\Solar.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /Gy- /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Debug\\" /Fd".\Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Solar.cpp
          Solar.cpp
      1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(1): warning C4005: '_CRT_SECURE_NO_WARNINGS' : macro redefinition
                  command-line arguments :  see previous definition of '_CRT_SECURE_NO_WARNINGS'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(98): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(99): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(100): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(149): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(179): warning C4244: 'argument' : conversion from 'float' to 'GLint', possible loss of data
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(291): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(296): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(301): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(306): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(311): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(316): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(321): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(326): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(331): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(88): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(89): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(90): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(139): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(169): warning C4244: 'argument' : conversion from 'float' to 'GLint', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(283): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(288): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(293): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(298): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(303): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(308): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(313): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(318): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(323): warning C4305: 'argument' : truncation from 'double' to 'float'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Debug\Solar.exe" /INCREMENTAL /NOLOGO odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:".\Debug\Solar.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Debug\Solar.lib" /MACHINE:X86 /SAFESEH .\Debug\planeta.obj
          .\Debug\Solar.obj
          .\Debug\tga.obj
-     1>planeta.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
          Solar.vcxproj -> C:\Users\nlopes\Documents\IPCA\EDJD\2º Ano\2º Semestre\Programação 3D\SistemaSolar\solarSS\.\Debug\Solar.exe
      1>Done Building Project "C:\Users\nlopes\Documents\IPCA\EDJD\2º Ano\2º Semestre\Programação 3D\SistemaSolar\solarSS\Solar.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:04.04
+Time Elapsed 00:00:01.34

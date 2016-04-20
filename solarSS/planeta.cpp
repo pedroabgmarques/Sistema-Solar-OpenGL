@@ -36,16 +36,24 @@ void Planeta::Draw(GLUquadric *mysolid)
 }
 
 void Planeta::Update(){
+
+	//Cálculo do movimento de trabslação do planeta em volta do sol
 	x = sin(iterator) * _raioOrbita;
 	z = cos(iterator) * _raioOrbita;
+
+	//Esta linha define a velocidade orbital
 	iterator += 3.14 / (45 * _raioOrbita);
 	if (iterator >= 3.14 * 2) 
 	{
+		//Demos uma volta completa ao sol (um ano)
 		iterator = 0;
 	}
+
+	//Cálculo do movimento de rotação em torno do seu eixo
 	_rotacaoAtual += _rotacao * 32;
 	if (_rotacaoAtual > 360)
 	{
+		//Demos uma volta completa (um dia)
 		_rotacaoAtual = _rotacao - 360;
 	}
 }

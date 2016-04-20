@@ -10,27 +10,28 @@
 #include <string>
 #include <vector>
 
+//Opções, controladas pelo teclado
+GLenum spinMode = GL_TRUE;
+GLenum drawOrbits = GL_TRUE;
 
-static GLenum spinMode = GL_TRUE;
-static GLenum singleStep = GL_FALSE;
+
+
 const int numeroPlanetas = 8;
 Planeta sistemasolar[numeroPlanetas];
-int MoveX = 0;
-int MoveY = 0;
 GLuint textures[numeroPlanetas];
 tgaInfo *im;
 GLUquadric *mysolid;
 
 static void KeyPressFunc(unsigned char Key, int x, int y)
 {
-	switch (Key) {//isto das teclas fui buscar a net, se quiseres tira,tao a funciunar
+	switch (Key) {
 	case 'R':
 	case 'r':
 		Key_r();
 		break;
-	case 's':
-	case 'S':
-		Key_s();
+	case 'O':
+	case 'o':
+		drawOrbits = !drawOrbits;
 		break;
 	case 27:	// tecla esc
 		exit(1);
@@ -53,24 +54,13 @@ static void SpecialKeyFunc(int Key, int x, int y)
 
 static void Key_r(void)
 {
-	if (singleStep) {
-		singleStep = GL_FALSE;
-		spinMode = GL_TRUE;		// da restard a animacao
-	}
-	else {
-		spinMode = !spinMode;	// liga e desliga a animaçao
-	}
-}
-
-static void Key_s(void)
-{
-	singleStep = GL_TRUE;
-	spinMode = GL_TRUE;
+	
+	spinMode = !spinMode;	// liga e desliga a animaçao
+	
 }
 
 static void Key_up(void)
 {
-	
 }
 
 static void Key_down(void)
@@ -147,7 +137,6 @@ void draworbit(float x, float y, float z, GLint radius)
 	glBegin(GL_LINE_LOOP);
 
 	for (float i = 0; i<(3.14 * 2); i += 3.14 / 360)
-
 	{
 		x = sin(i)*radius;
 		z = cos(i)*radius;
@@ -171,12 +160,15 @@ void DrawPlanetas(){
 
 		sistemasolar[i].Draw(mysolid);
 
-		draworbit(
-			sistemasolar[i].GetX(), 
-			sistemasolar[i].GetY(), 
-			sistemasolar[i].GetZ(), 
-			sistemasolar[i].GetDistanciaSol()
-		);
+		if (drawOrbits){
+			draworbit(
+				sistemasolar[i].GetX(),
+				sistemasolar[i].GetY(),
+				sistemasolar[i].GetZ(),
+				sistemasolar[i].GetDistanciaSol()
+			);
+		}
+		
 		
 	}
 }
@@ -184,16 +176,15 @@ void DrawPlanetas(){
 //isto pode ou nao ser alterado
 static void Animate(void)
 {
+
 	// limpa a janela
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//Colocar a camara na sua posição e orientação
 	glLoadIdentity();
+	glRotated(25.0, 1.0, 0.0, 0.0);
+	glTranslatef(0.0, -10.0, -30.0);
 	
-	//Puxa a camara para trás
-	glTranslatef(0.0, 0.0, -30.0);
-	//inclinação da camara
-	glRotatef(25.0, 1.0, 0.0, 0.0);
-
 	if (spinMode) {
 		//Atualiza a posição dos planetas
 		UpdatePlanetas();
@@ -208,10 +199,6 @@ static void Animate(void)
 
 	glFlush();
 	glutSwapBuffers();
-
-	if (singleStep) {
-		spinMode = GL_TRUE;
-	}
 
 	glutPostRedisplay();
 	// pede um redraw para um proposito da animaçao
@@ -228,7 +215,6 @@ void OpenGLInit(void)
 	// Activa o teste de profundidade
 	glEnable(GL_DEPTH_TEST);
 }
-
 
 static void ResizeWindow(int w, int h)
 {
@@ -286,6 +272,12 @@ void load_tga_image(std::string nome, GLuint texture)
 
 void initSistemaSolar()
 {
+
+	//Parametros do método SetValues:
+	//Distancia ao sol / raio da órbita
+	//Raio do planeta
+	//Velocidade de rotação
+	//Textura
 
 	Planeta sol;
 	sol.SetValues(0, 2, 0.01, textures[0]);
