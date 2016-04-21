@@ -31,6 +31,12 @@ GLint midWindowX, midWindowY;
 //Opções, controladas pelo teclado
 GLenum spinMode = GL_TRUE;
 GLenum drawOrbits = GL_TRUE;
+float simulationSpeed = 1000; //Bigger values are slower
+float simulationSpeedOriginal = simulationSpeed;
+bool holdingMoreSimulationSpeed = false;
+bool holdingLessSimulationSpeed = false;
+float simulationSpeedChangeAcceleration = 0.1;
+float simulationSpeedChangeAccelerationOriginal = simulationSpeedChangeAcceleration;
 
 //Camara
 Camera *cam;
@@ -73,6 +79,13 @@ void handleKeypress(int theKey, int theAction)
 		case 'E':
 			cam->holdingDown = true;
 			break;
+		case GLFW_KEY_UP :
+			spinMode = true;
+			holdingMoreSimulationSpeed = true;
+			break;
+		case GLFW_KEY_DOWN:
+			holdingLessSimulationSpeed = true;
+			break;
 		default:
 			// Do nothing...
 			break;
@@ -99,6 +112,14 @@ void handleKeypress(int theKey, int theAction)
 			break;
 		case 'E':
 			cam->holdingDown = false;
+			break;
+		case GLFW_KEY_UP:
+			holdingMoreSimulationSpeed = false;
+			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
+			break;
+		case GLFW_KEY_DOWN:
+			holdingLessSimulationSpeed = false;
+			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
 			break;
 		case 'R':
 		case 'r':
@@ -231,7 +252,7 @@ void applymaterial(int type)
 
 void UpdatePlanetas(){
 	for (int i = 0; i < numeroPlanetas; i++){
-		sistemasolar[i].Update();
+		sistemasolar[i].Update(simulationSpeed);
 	}
 }
 
@@ -305,6 +326,21 @@ static void Animate(void)
 	glTranslatef( -cam->getXPos(), -cam->getYPos(), -cam->getZPos() );
 	
 	if (spinMode) {
+
+		//Controla a velocidade da simulação
+		if (holdingMoreSimulationSpeed && simulationSpeed > 30){
+			simulationSpeed -= simulationSpeedChangeAcceleration;
+			simulationSpeedChangeAcceleration += 0.1;
+		}
+		if (holdingLessSimulationSpeed){
+			simulationSpeed += simulationSpeedChangeAcceleration;
+			simulationSpeedChangeAcceleration += 0.1;
+			if (simulationSpeed > 5000){
+				spinMode = false;
+				simulationSpeed = 5000;
+			}
+		}
+
 		//Atualiza a posição dos planetas
 		UpdatePlanetas();
 	}
@@ -415,50 +451,49 @@ void initSistemaSolar()
 
 	float escalapp = 30;
 	float escalapg = 10;
-	float PeriodoOrbital = 0.0005;
 
 	Planeta sol;
-	sol.SetValues(0, 1, 0.01,0, textures[0]);
+	sol.SetValues(0, 1, 0.01, 1, textures[0]);
 	load_tga_image("sun", textures[0]);
 	sistemasolar[0] = sol;
 
 	Planeta mercurio;
-	mercurio.SetValues(4, 0.0035 * escalapp, 0, 0.2, textures[1]);
+	mercurio.SetValues(4, 0.0035 * escalapp, 0, 1.2, textures[1]);
 	load_tga_image("mercury", textures[1]);
 	sistemasolar[1] = mercurio;
 
 	Planeta venus;
-	venus.SetValues(7, 0.0087 * escalapp, 0, 0.6, textures[2]);
+	venus.SetValues(7, 0.0087 * escalapp, 0, 1.6, textures[2]);
 	load_tga_image("venus", textures[2]);
 	sistemasolar[2] = venus;
 
 	Planeta terra;
-	terra.SetValues(10, 0.0092*escalapp, 0, 1, textures[3]);
+	terra.SetValues(10, 0.0092*escalapp, 0.00365, 2, textures[3]);
 	load_tga_image("earth", textures[3]);
 	sistemasolar[3] = terra;
 
 	Planeta marte;
-	marte.SetValues(16, 0.0049*escalapp, 0, 1.9, textures[4]);
+	marte.SetValues(16, 0.0049*escalapp, 0, 2.9, textures[4]);
 	load_tga_image("mars", textures[4]);
 	sistemasolar[4] = marte;
 
 	Planeta jupiter;
-	jupiter.SetValues(55, 0.1004*escalapg, 0, 11.9, textures[5]);
+	jupiter.SetValues(55, 0.1004*escalapg, 0, 12.9, textures[5]);
 	load_tga_image("jupiter", textures[5]);
 	sistemasolar[5] = jupiter;
 
 	Planeta saturno;
-	saturno.SetValues(102, 0.08369*escalapg, 0, 29.5, textures[6]);
+	saturno.SetValues(102, 0.08369*escalapg, 0, 30.5, textures[6]);
 	load_tga_image("saturn", textures[6]);
 	sistemasolar[6] = saturno;
 
 	Planeta urano;
-	urano.SetValues(206, 0.03644*escalapp, 0, 84.0, textures[7]);
+	urano.SetValues(206, 0.03644*escalapp, 0, 85.0, textures[7]);
 	load_tga_image("uranus", textures[7]);
 	sistemasolar[7] = urano;
 
 	Planeta neptuno;
-	neptuno.SetValues(323, 0.03538*escalapp, 0, 164.8, textures[8]);
+	neptuno.SetValues(323, 0.03538*escalapp, 0, 165.8, textures[8]);
 	load_tga_image("neptune", textures[8]);
 	sistemasolar[8] = neptuno;
 
@@ -550,11 +585,6 @@ int main(int argc, char** argv)
 	// Specify the function which should execute when the mouse is moved
 	glfwSetMousePosCallback(handleMouseMove);
 	glfwSetWindowSizeCallback(ResizeWindow);
-
-	//glutKeyboardFunc(handleKeypress);
-	//glutSpecialFunc(SpecialKeyFunc);
-	//glutReshapeFunc(ResizeWindow);
-	//glutDisplayFunc(Animate);
 
 	// The deltaTime variable keeps track of how much time has elapsed between one frame and the next.
 	// This allows us to perform framerate independent movement i.e. the camera will move at the same

@@ -1,6 +1,12 @@
 #include "planeta.h"
-#include "GL/glut.h"
 #include <math.h>
+#include <string>
+#include <iostream>
+
+// Specify default namespace for commonly used elements
+using std::string;
+using std::cout;
+using std::endl;
 
 void Planeta::SetValues(float distanciaSol, float raioPlaneta, float rotacao,float periodoOrbital, GLuint textura)
 {
@@ -36,28 +42,30 @@ void Planeta::Draw(GLUquadric *mysolid)
 	glPopMatrix();
 }
 
-void Planeta::Update(){
+void Planeta::Update(float simulationSpeed){
 	//Cálculo do movimento de trabslação do planeta em volta do sol
 	x = sin(iterator) * _raioOrbita;
 	z = cos(iterator) * _raioOrbita;
 
 	//Esta linha define a velocidade orbital
-	iterator += 3.14*2 / (600 *_PeriodoOrbital);
+	iterator += 3.14 * 2 / (simulationSpeed * _PeriodoOrbital);
 	if (iterator >= 3.14 * 2) 
 	{
 		//Demos uma volta completa ao sol (um ano)
 		iterator = 0;
+		if (_raioOrbita == 10){
+			//Terra
+			std::cout << "Contador de dias num ano: " << contadorDias << "\t" << std::endl;
+		}
+		
 	}
 
 	//Cálculo do movimento de rotação em torno do seu eixo
-	_rotacaoAtual += _rotacao * 32;
-	if (_rotacaoAtual > 360)
-	{
-		//Demos uma volta completa (um dia)
-		_rotacaoAtual = _rotacao - 360;
+	_rotacaoAtual += 3.14 * 2 / (simulationSpeed * _rotacao);
+	if (_rotacaoAtual > 360){
+		_rotacaoAtual = 0;
+		contadorDias++;
 	}
-
-
 	
 }
 

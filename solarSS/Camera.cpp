@@ -58,9 +58,11 @@ void Camera::handleMouseMove(int mouseX, int mouseY)
 	double horizMovement = (mouseX - windowMidX + 1) * yawSensitivity;
 	double vertMovement = (mouseY - windowMidY) * pitchSensitivity;
 
+	//Debug
+	/*
 	std::cout << "Mid window values: " << windowMidX << "\t" << windowMidY << std::endl;
 	std::cout << "Mouse values     : " << mouseX << "\t" << mouseY << std::endl;
-	std::cout << horizMovement << "\t" << vertMovement << std::endl << std::endl;
+	std::cout << horizMovement << "\t" << vertMovement << std::endl << std::endl;*/
 
 	// Apply the mouse movement to our rotation vector. The vertical (look up and down)
 	// movement is applied on the X axis, and the horizontal (look left and right)
