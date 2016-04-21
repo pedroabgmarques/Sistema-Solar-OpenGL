@@ -1,4 +1,4 @@
-#include <gl\glut.h>
+#include "gl/glut.h"
 #include "planeta.h"
 #include "Vec3.h"
 
@@ -12,10 +12,10 @@ class Lua
 	float _rotacao; 
 	float _rotacaoAtual;
 	float _PeriodoOrbital;
-	Planeta _planeta;
+	int _indicePlaneta;
 public:
 
-	void SetValues(float, float, float, float, GLuint,Planeta);
+	void SetValues(float, float, float, float, GLuint,int);
 	void Draw(GLUquadric*);
 	void Update(float, Vec3<float>);
 	float GetRaioLua();
@@ -23,7 +23,7 @@ public:
 	float GetY();
 	float GetZ();
 	float GetRaioOrbita();
-	Planeta GetPlaneta();
+	int GetPlaneta();
 
 
 

@@ -1,4 +1,4 @@
-#include <gl\glut.h>
+#include "gl/glut.h"
 using namespace std;
 
 class Planeta

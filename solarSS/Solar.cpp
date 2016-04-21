@@ -7,7 +7,7 @@
 #include "Solar.h"   
 #include <stdlib.h> 
 #include <stdio.h>
-#include <gl\glut.h>
+#include "gl/glut.h"
 #include "GL/glfw.h"
 #include "lua.h"
 #include "tga.h"
@@ -52,7 +52,7 @@ Planeta sistemasolar[numeroPlanetas];
 GLuint textures[numeroPlanetas];
 tgaInfo *im;
 GLUquadric *mysolid;
-const int numeroLuas = 1;
+const int numeroLuas = 2;
 Lua luas[numeroLuas];
 GLuint texturasLua[numeroLuas];
 
@@ -182,7 +182,7 @@ static void Key_down(void)
 static void initLights(void)
 {
 	// Define a luz ambiente global
-	GLfloat global_ambient[] = { 0.01f, 0.01f, 0.01f, 1.0f };
+	GLfloat global_ambient[] = { 0.05f, 0.05f, 0.05f, 1.0f };
 	// Define a luz light0. Existem 8 fontes de luz no total.
 	GLfloat light0_ambient[] = { 0.05f, 0.05f, 0.05f, 1.0f };
 	GLfloat light0_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -266,9 +266,9 @@ void UpdateLuas()
 	for (int i = 0; i < numeroLuas; i++)
 	{
 		Vec3<float> posicaoPlaneta = Vec3<float>(
-			sistemasolar[3].GetX(),
-			sistemasolar[3].GetY(),
-			sistemasolar[3].GetZ()
+			sistemasolar[luas[i].GetPlaneta()].GetX(),
+			sistemasolar[luas[i].GetPlaneta()].GetY(),
+			sistemasolar[luas[i].GetPlaneta()].GetZ()
 		);
 		luas[i].Update(simulationSpeed, posicaoPlaneta);
 	}
@@ -276,19 +276,20 @@ void UpdateLuas()
 
 
 
-void draworbit(float x, float y, float z, GLint radius)
+void draworbit(float centerX, float centerY, float centerZ, GLint radius)
 {
 	//glDisable(GL_LIGHTING);
 	glBegin(GL_LINE_LOOP);
 
+	float x, z;
+
 	for (float i = 0; i<(3.14 * 2); i += (3.14 * 2) / 360)
 	{
-		glColor3f(1.0, 0, 0);
-		x = sin(i)*radius;
-		z = cos(i)*radius;
+		x = centerX + sin(i)*radius;
+		z = centerZ + cos(i)*radius;
 		glVertex3f(x, 0, z);
 		
-		Vec3<float> normal = Vec3<float>(0 - x, 0, 0 - z);
+		Vec3<float> normal = Vec3<float>(sistemasolar[0].GetX() - x, 0, sistemasolar[0].GetZ() - z);
 		normal.normalise();
 
 		glNormal3f(normal.getX(), 0, normal.getZ());
@@ -317,9 +318,9 @@ void DrawPlanetas(){
 
 		if (drawOrbits){
 			draworbit(
-				sistemasolar[i].GetX(),
-				sistemasolar[i].GetY(),
-				sistemasolar[i].GetZ(),
+				sistemasolar[0].GetX(),
+				sistemasolar[0].GetY(),
+				sistemasolar[0].GetZ(),
 				sistemasolar[i].GetDistanciaSol()
 			);
 		}
@@ -330,18 +331,20 @@ void DrawPlanetas(){
 }
 void DrawLuas()
 {
-	for (int i = numeroLuas; i > -1; i--){
+	for (int i = 0; i < numeroLuas; i++){
 
-		applymaterial(3);
+		applymaterial(0);
 
 		glPushMatrix();
 
 		luas[i].Draw(mysolid);
 
+		glPopMatrix();
+
 		Vec3<float> posicaoPlaneta = Vec3<float>(
-			sistemasolar[3].GetX(),
-			sistemasolar[3].GetY(),
-			sistemasolar[3].GetZ()
+			sistemasolar[luas[i].GetPlaneta()].GetX(),
+			sistemasolar[luas[i].GetPlaneta()].GetY(),
+			sistemasolar[luas[i].GetPlaneta()].GetZ()
 			);
 
 		if (drawOrbits){
@@ -353,8 +356,6 @@ void DrawLuas()
 				);
 		}
 
-		glPopMatrix();
-		
 	}
 }
 //isto pode ou nao ser alterado
@@ -379,7 +380,7 @@ static void Animate(void)
 	if (spinMode) {
 
 		//Controla a velocidade da simulação
-		if (holdingMoreSimulationSpeed && simulationSpeed > 30){
+		if (holdingMoreSimulationSpeed && simulationSpeed > 15){
 			simulationSpeed -= simulationSpeedChangeAcceleration;
 			simulationSpeedChangeAcceleration += 0.1;
 		}
@@ -527,7 +528,7 @@ void initSistemaSolar()
 	sistemasolar[3] = terra;
 
 		Lua lua;
-		lua.SetValues(2, 0.0092*escalapp / 2, 0.00365, 0.05, textures[3], terra);
+		lua.SetValues(1, 0.0092*escalapp / 2, 0.00365, 0.01, textures[3], 3);
 		luas[0] = lua;
 
 	Planeta marte;
@@ -539,6 +540,10 @@ void initSistemaSolar()
 	jupiter.SetValues(55, 0.1004*escalapg, 0, 12.9, textures[5]);
 	load_tga_image("jupiter", textures[5]);
 	sistemasolar[5] = jupiter;
+
+		Lua jupiter1;
+		jupiter1.SetValues(4, 0.0092*escalapp / 2, 0.00365, 0.01, textures[3], 5);
+		luas[1] = jupiter1;
 
 	Planeta saturno;
 	saturno.SetValues(102, 0.08369*escalapg, 0, 30.5, textures[6]);
@@ -601,7 +606,7 @@ int main(int argc, char** argv)
 		8,          // alpha bits
 		32,         // depth bits
 		0,          // stencil bits
-		GLFW_FULLSCREEN
+		GLFW_WINDOW //GLFW_FULLSCREEN
 		)) {
 			std::cout << "Failed to open fullscreen window!" << std::endl;
 			glfwTerminate();

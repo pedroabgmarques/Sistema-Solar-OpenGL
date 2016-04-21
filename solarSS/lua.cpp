@@ -8,7 +8,7 @@ using std::string;
 using std::cout;
 using std::endl;
 
-void Lua::SetValues(float distanciaSol, float raioLua, float rotacao, float periodoOrbital, GLuint textura, Planeta planeta)
+void Lua::SetValues(float distanciaSol, float raioLua, float rotacao, float periodoOrbital, GLuint textura, int planeta)
 {
 	_raioOrbita = distanciaSol;
 	_raioLua = raioLua;
@@ -16,7 +16,7 @@ void Lua::SetValues(float distanciaSol, float raioLua, float rotacao, float peri
 	_PeriodoOrbital = periodoOrbital;
 	_rotacaoAtual = 0;
 	_textura = textura;
-	_planeta = planeta;
+	_indicePlaneta = planeta;
 	x, y, z = 0;
 	iterator = 0;
 
@@ -48,8 +48,6 @@ void Lua::Update(float simulationSpeed, Vec3<float> posisaoPlaneta){
 	x = posisaoPlaneta.getX() + _raioOrbita * sin(iterator / 180.0 * 3.14);
 	z = posisaoPlaneta.getZ() + _raioOrbita * cos(iterator / 180.0 * 3.14);
 
-	std::cout << "Posicao do planeta: " << posisaoPlaneta.getX() << "\t" << std::endl;
-
 	//Esta linha define a velocidade orbital
 	iterator += 3.14 * 2 / (simulationSpeed * _PeriodoOrbital);
 	if (iterator >= 360)
@@ -64,8 +62,8 @@ void Lua::Update(float simulationSpeed, Vec3<float> posisaoPlaneta){
 
 }
 
-Planeta Lua::GetPlaneta(){
-	return _planeta;
+int Lua::GetPlaneta(){
+	return _indicePlaneta;
 }
 
 float Lua::GetRaioLua(){

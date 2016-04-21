@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include <gl\glut.h>
+#include "gl/glut.h"
 
 const double Camera::TO_RADS = 3.141592654 / 180.0; // The value of 1 degree in radians
 
