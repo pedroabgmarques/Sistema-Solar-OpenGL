@@ -52,7 +52,7 @@ Planeta sistemasolar[numeroPlanetas];
 GLuint textures[numeroPlanetas];
 tgaInfo *im;
 GLUquadric *mysolid;
-const int numeroLuas = 2;
+const int numeroLuas = 3;
 Lua luas[numeroLuas];
 GLuint texturasLua[numeroLuas];
 
@@ -542,8 +542,12 @@ void initSistemaSolar()
 	sistemasolar[5] = jupiter;
 
 		Lua jupiter1;
-		jupiter1.SetValues(4, 0.0092*escalapp / 2, 0.00365, 0.01, textures[3], 5);
+		jupiter1.SetValues(2, 0.0092*escalapp / 2, 0.00365, 0.005, textures[3], 5);
 		luas[1] = jupiter1;
+
+		Lua jupiter2;
+		jupiter1.SetValues(4, 0.0092*escalapp / 2, 0.00365, 0.01, textures[3], 5);
+		luas[2] = jupiter1;
 
 	Planeta saturno;
 	saturno.SetValues(102, 0.08369*escalapg, 0, 30.5, textures[6]);
