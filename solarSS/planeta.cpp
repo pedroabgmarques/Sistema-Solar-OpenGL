@@ -22,7 +22,7 @@ void Planeta::SetValues(float distanciaSol, float raioPlaneta, float rotacao,flo
 }
 void Planeta::Draw(GLUquadric *mysolid)
 {
-	glPushMatrix();
+	
 
 	glBindTexture(GL_TEXTURE_2D, _textura);
 
@@ -39,17 +39,16 @@ void Planeta::Draw(GLUquadric *mysolid)
 
 	gluSphere(mysolid, _raioPlaneta, 64, 64);
 
-	glPopMatrix();
 }
 
 void Planeta::Update(float simulationSpeed){
 	//Cálculo do movimento de trabslação do planeta em volta do sol
-	x = sin(iterator) * _raioOrbita;
-	z = cos(iterator) * _raioOrbita;
+	x = _raioOrbita * sin(iterator / 180.0 * 3.14);
+	z = _raioOrbita * cos(iterator / 180.0 * 3.14);
 
 	//Esta linha define a velocidade orbital
 	iterator += 3.14 * 2 / (simulationSpeed * _PeriodoOrbital);
-	if (iterator >= 3.14 * 2) 
+	if (iterator >= 360 ) 
 	{
 		//Demos uma volta completa ao sol (um ano)
 		iterator = 0;

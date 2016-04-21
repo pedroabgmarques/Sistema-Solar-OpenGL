@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="lua.cpp" />
     <ClCompile Include="planeta.cpp" />
     <ClCompile Include="Solar.cpp" />
     <ClCompile Include="tga.cpp" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FPSManager.hpp" />
+    <ClInclude Include="lua.h" />
     <ClInclude Include="planeta.h" />
     <ClInclude Include="Solar.h" />
     <ClInclude Include="tga.h" />
