@@ -1,9 +1,8 @@
-#include "GL/glut.h"
+#include <gl\glut.h>
 using namespace std;
 
 class Planeta
 {
-
 	GLuint _textura;
 	float _raioOrbita, _raioPlaneta;
 	float x, y, z;

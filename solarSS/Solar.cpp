@@ -7,9 +7,9 @@
 #include "Solar.h"   
 #include <stdlib.h> 
 #include <stdio.h>
-#include "GL/glut.h"
+#include <gl\glut.h>
 #include "GL/glfw.h"
-#include "planeta.h"
+#include "lua.h"
 #include "tga.h"
 #include <string>
 #include <vector>
@@ -52,6 +52,11 @@ Planeta sistemasolar[numeroPlanetas];
 GLuint textures[numeroPlanetas];
 tgaInfo *im;
 GLUquadric *mysolid;
+const int numeroLuas = 1;
+Lua luas[numeroLuas];
+GLuint texturasLua[numeroLuas];
+
+
 
 // Callback function to handle keypresses
 void handleKeypress(int theKey, int theAction)
@@ -256,6 +261,21 @@ void UpdatePlanetas(){
 	}
 }
 
+void UpdateLuas()
+{
+	for (int i = 0; i < numeroLuas; i++)
+	{
+		Vec3<float> posicaoPlaneta = Vec3<float>(
+			sistemasolar[3].GetX(),
+			sistemasolar[3].GetY(),
+			sistemasolar[3].GetZ()
+		);
+		luas[i].Update(simulationSpeed, posicaoPlaneta);
+	}
+}
+
+
+
 void draworbit(float x, float y, float z, GLint radius)
 {
 	//glDisable(GL_LIGHTING);
@@ -289,9 +309,11 @@ void DrawPlanetas(){
 			applymaterial(0);
 		}
 
+		glPushMatrix();
+
 		sistemasolar[i].Draw(mysolid);
 
-
+		glPopMatrix();
 
 		if (drawOrbits){
 			draworbit(
@@ -303,9 +325,38 @@ void DrawPlanetas(){
 		}
 		
 		
+		
 	}
 }
+void DrawLuas()
+{
+	for (int i = numeroLuas; i > -1; i--){
 
+		applymaterial(3);
+
+		glPushMatrix();
+
+		luas[i].Draw(mysolid);
+
+		Vec3<float> posicaoPlaneta = Vec3<float>(
+			sistemasolar[3].GetX(),
+			sistemasolar[3].GetY(),
+			sistemasolar[3].GetZ()
+			);
+
+		if (drawOrbits){
+			draworbit(
+				posicaoPlaneta.getX(),
+				posicaoPlaneta.getY(),
+				posicaoPlaneta.getZ(),
+				luas[i].GetRaioOrbita()
+				);
+		}
+
+		glPopMatrix();
+		
+	}
+}
 //isto pode ou nao ser alterado
 static void Animate(void)
 {
@@ -343,6 +394,8 @@ static void Animate(void)
 
 		//Atualiza a posição dos planetas
 		UpdatePlanetas();
+		UpdateLuas();
+
 	}
 
 	glEnable(GL_TEXTURE_2D);
@@ -351,6 +404,7 @@ static void Animate(void)
 
 	//Desenha os planetas
 	DrawPlanetas();
+	DrawLuas();
 
 	glfwSwapBuffers(); // Swap the buffers to display the scene (so we don't have to watch it being drawn!)
 
@@ -468,9 +522,13 @@ void initSistemaSolar()
 	sistemasolar[2] = venus;
 
 	Planeta terra;
-	terra.SetValues(10, 0.0092*escalapp, 0.00365, 2, textures[3]);
+	terra.SetValues(10, 0.0092*escalapp, 0.00365, 1, textures[3]);
 	load_tga_image("earth", textures[3]);
 	sistemasolar[3] = terra;
+
+		Lua lua;
+		lua.SetValues(2, 0.0092*escalapp / 2, 0.00365, 0.05, textures[3], terra);
+		luas[0] = lua;
 
 	Planeta marte;
 	marte.SetValues(16, 0.0049*escalapp, 0, 2.9, textures[4]);
