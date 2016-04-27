@@ -55,6 +55,7 @@ GLUquadric *mysolid;
 const int numeroLuas = 3;
 Lua luas[numeroLuas];
 GLuint texturasLua[numeroLuas];
+int myDL;
 
 
 
@@ -527,9 +528,10 @@ void initSistemaSolar()
 	load_tga_image("earth", textures[3]);
 	sistemasolar[3] = terra;
 
-		Lua lua;
-		lua.SetValues(1, 0.0092*escalapp / 2, 0.00365, 0.01, textures[3], 3);
-		luas[0] = lua;
+	Lua lua;
+	lua.SetValues(1, 0.0092*escalapp / 2, 0.00365, 0.01, textures[9],3);
+	load_tga_image("moon", textures[9]);
+	luas[0] = lua;
 
 	Planeta marte;
 	marte.SetValues(16, 0.0049*escalapp, 0, 2.9, textures[4]);
@@ -541,13 +543,13 @@ void initSistemaSolar()
 	load_tga_image("jupiter", textures[5]);
 	sistemasolar[5] = jupiter;
 
-		Lua jupiter1;
-		jupiter1.SetValues(2, 0.0092*escalapp / 2, 0.00365, 0.005, textures[3], 5);
-		luas[1] = jupiter1;
+	Lua jupiter1;
+	jupiter1.SetValues(2, 0.0092*escalapp / 2, 0.00365, 0.005, textures[3], 5);		
+	luas[1] = jupiter1;
 
-		Lua jupiter2;
-		jupiter1.SetValues(4, 0.0092*escalapp / 2, 0.00365, 0.01, textures[3], 5);
-		luas[2] = jupiter1;
+	Lua jupiter2;
+	jupiter1.SetValues(4, 0.0092*escalapp / 2, 0.00365, 0.01, textures[3], 5);
+	luas[2] = jupiter1;
 
 	Planeta saturno;
 	saturno.SetValues(102, 0.08369*escalapg, 0, 30.5, textures[6]);
@@ -567,8 +569,104 @@ void initSistemaSolar()
 
 }
 
+void funcmyDL(void)
+{
+	myDL = glGenLists(1);
 
-//rota principal
+	glNewList(myDL, GL_COMPILE);
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	// Z+ Face
+	// Selecciona textura
+	glBindTexture(GL_TEXTURE_2D, textures[0]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);
+	glEnd();
+	// Z- Face
+	glBindTexture(GL_TEXTURE_2D, textures[1]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, -1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);
+	glEnd();
+	// X+ Face
+	glBindTexture(GL_TEXTURE_2D, textures[2]);
+	glBegin(GL_QUADS);
+	glNormal3f(1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, -1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, 1.0f, 1.0f);
+	glEnd();
+	// X- Face
+	glBindTexture(GL_TEXTURE_2D, textures[3]);
+	glBegin(GL_QUADS);
+	glNormal3f(-1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1.0f, 1.0f, 1.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);
+	glEnd();
+	// Y+ Face
+	glBindTexture(GL_TEXTURE_2D, textures[4]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 1.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, 1.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, -1.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, 1.0f, -1.0f);
+	glEnd();
+	// Y- Face
+	glBindTexture(GL_TEXTURE_2D, textures[5]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, -1.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 1.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1.0f, -1.0f, 1.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, -1.0f, -1.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f, -1.0f, -1.0f);
+	glEnd();
+
+	glEndList();
+}
+
+void skybox(void)
+{
+	char *impathfile[6] = { "spaceTest_back6.tga", "spaceTest_bottom4.tga", "spaceTest_front5.tga", "spaceTest_left2.tga", "spaceTest_right1.tga", "spaceTest_top3.tga" };
+	int i;
+
+	
+	for (i = 0; i<6; i++)
+	{
+		// Selecciona uma textura
+		glBindTexture(GL_TEXTURE_2D, textures[i]);
+
+		// Selecciona a mistura da textura com a cor
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+		
+		// Se não tem mipmaps
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im[i]->width, im[i]->height, 0, GL_RGB, GL_UNSIGNED_BYTE, im[i]->imageData);
+	}
+
+	// Destroi as imagens
+}
+
+
+
+
+//rota 
 int main(int argc, char** argv)
 {
 
@@ -637,7 +735,9 @@ int main(int argc, char** argv)
 	glLoadIdentity();
 
 	OpenGLInit();
-	
+	skybox();
+	funcmyDL();
+
 	glGenTextures(numeroPlanetas, textures);
 	initSistemaSolar();
 	initLights();
@@ -660,6 +760,7 @@ int main(int argc, char** argv)
 
 	std::cout << "Running!" << std::endl;
 
+	
 	while (running)
 	{
 		// Calculate our camera movement
@@ -667,12 +768,19 @@ int main(int argc, char** argv)
 
 		// Draw our scene
 		Animate();
-
+		  
 		// exit if ESC was pressed or window was closed
 		running = !glfwGetKey(GLFW_KEY_ESC) && glfwGetWindowParam(GLFW_OPENED);
 
+		//Camera getPosition();
+
+		
+
 		// Call our fpsManager to limit the FPS and get the frame duration to pass to the cam->move method
 		deltaTime = fpsManager.enforceFPS();
+
+		
+
 	}
 
 	// Clean up GLFW and exit

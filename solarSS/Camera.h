@@ -20,10 +20,13 @@ protected:
 	// Camera rotation
 	Vec3<double> rotation;
 
+
+
 	// Camera movement speed. When we call the move() function on a camera, it moves using these speeds
 	Vec3<double> speed;
 
 	double movementSpeedFactor; // Controls how fast the camera moves
+	double cameraPosition;
 	double pitchSensitivity;    // Controls how sensitive mouse movements affect looking up and down
 	double yawSensitivity;      // Controls how sensitive mouse movements affect looking left and right
 
@@ -35,6 +38,8 @@ protected:
 
 	// Method to set some reasonable default values. For internal use by the class only.
 	void initCamera();
+
+
 
 public:
 	static const double TO_RADS; // The value of 1 degree in radians
