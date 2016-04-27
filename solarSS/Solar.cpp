@@ -318,16 +318,41 @@ static void Animate(void)
 
 	//glViewport(0, 0, width, height);
 	glViewport(0, 0, width, height);
+	ResizeWindow(width, height);
 
 	//Desenha os planetas
 	DrawPlanetas();
 	DrawLuas();
 
 	// Draw on left side
-	glViewport(width - 200, height - 200, width, height);
-	gluOrtho2D(0, 0, 200, 200);
+
+	float ratio;
+	// Prevenir a divisão por zero, se a janela for muito pequena
+	if (height == 0) height = 1;
+	ratio = 1.0 * width / height;
+	glViewport(width / 1.5, height / 1.5, width / 2, height / 2);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45, ratio, 1, 5000);
+
+	//HERE BE DRAGONS AND MAGIC NUMBERS
+	float offsetX;
+	if (width > 800) {
+		offsetX = -30.0;
+	}
+	else{
+		offsetX = -90.0;
+	}
+	glTranslatef(offsetX, -150.0, 0.0);
+	gluLookAt(0.0, 1300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glDisable(GL_LIGHTING);
 	DrawPlanetas();
-	
+	DrawLuas();
+	glEnable(GL_LIGHTING);
+
+
 
 	glfwSwapBuffers(); // Swap the buffers to display the scene (so we don't have to watch it being drawn!)
 
@@ -373,7 +398,7 @@ static void ResizeWindow(int w, int h)
 	// prepara a vista da matrix (nao muito bem!)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, aspectRatio, 1, 600);
+	gluPerspective(60.0, aspectRatio, 1, 5000);
 
 	// seleciona o modelo de vista da matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -712,8 +737,6 @@ void AppStart(){
 		deltaTime = fpsManager.enforceFPS();
 	}
 }
-
-
 
 //rota principal
 int main(int argc, char** argv)
