@@ -610,7 +610,7 @@ int main(int argc, char** argv)
 		8,          // alpha bits
 		32,         // depth bits
 		0,          // stencil bits
-		GLFW_WINDOW //GLFW_FULLSCREEN
+		GLFW_FULLSCREEN 
 		)) {
 			std::cout << "Failed to open fullscreen window!" << std::endl;
 			glfwTerminate();
