@@ -245,12 +245,12 @@ void DrawPlanetas(){
 void DrawCamera(){
 	glColor3f(1.0, 0.0, 0.0);
 	glPushMatrix();
-	glTranslatef(-cam->getXPos(), 0, -cam->getZPos());
-	glRotatef(cam->getYRot(), 0.0f, 1.0f, 0.0f); // Rotate our camera on the  y-axis (looking left and right)
+	glTranslatef(cam->getXPos(), 0, cam->getZPos());
+	glRotatef(-cam->getYRot(), 0.0f, 1.0f, 0.0f); // Rotate our camera on the  y-axis (looking left and right)
 	glBegin(GL_TRIANGLES);
 		glVertex3f(0.0f, 0.0f, 0.0f);
-		glVertex3f(-10.0f, 0.0f, -10.0f);
-		glVertex3f(10.0f, 0.0f, -10.0f);
+		glVertex3f(10.0f, 0.0f, 10.0f);
+		glVertex3f(-10.0f, 0.0f, 10.0f);
 	glEnd();
 	glPopMatrix();
 	glColor3f(1.0, 1.0, 1.0);
