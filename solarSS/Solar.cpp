@@ -37,6 +37,8 @@ bool holdingMoreSimulationSpeed = false;
 bool holdingLessSimulationSpeed = false;
 float simulationSpeedChangeAcceleration = 0.1;
 float simulationSpeedChangeAccelerationOriginal = simulationSpeedChangeAcceleration;
+bool gameMode = true;
+bool changeGameModeActive = false;
 
 //Camara
 Camera *cam;
@@ -56,99 +58,11 @@ const int numeroLuas = 3;
 Lua luas[numeroLuas];
 GLuint texturasLua[numeroLuas];
 
-
-
-// Callback function to handle keypresses
-void handleKeypress(int theKey, int theAction)
-{
-	// If a key is pressed, toggle the relevant key-press flag
-	if (theAction == GLFW_PRESS)
-	{
-		switch (theKey)
-		{
-		case 'W':
-			cam->holdingForward = true;
-			break;
-		case 'S':
-			cam->holdingBackward = true;
-			break;
-		case 'A':
-			cam->holdingLeftStrafe = true;
-			break;
-		case 'D':
-			cam->holdingRightStrafe = true;
-			break;
-		case 'Q':
-			cam->holdingUp = true;
-			break;
-		case 'E':
-			cam->holdingDown = true;
-			break;
-		case GLFW_KEY_UP :
-			spinMode = true;
-			holdingMoreSimulationSpeed = true;
-			break;
-		case GLFW_KEY_DOWN:
-			holdingLessSimulationSpeed = true;
-			break;
-		default:
-			// Do nothing...
-			break;
-		}
-	}
-	else // If a key is released, toggle the relevant key-release flag
-	{
-		switch (theKey)
-		{
-		case 'W':
-			cam->holdingForward = false;
-			break;
-		case 'S':
-			cam->holdingBackward = false;
-			break;
-		case 'A':
-			cam->holdingLeftStrafe = false;
-			break;
-		case 'D':
-			cam->holdingRightStrafe = false;
-			break;
-		case 'Q':
-			cam->holdingUp = false;
-			break;
-		case 'E':
-			cam->holdingDown = false;
-			break;
-		case GLFW_KEY_UP:
-			holdingMoreSimulationSpeed = false;
-			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
-			break;
-		case GLFW_KEY_DOWN:
-			holdingLessSimulationSpeed = false;
-			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
-			break;
-		case 'R':
-		case 'r':
-			Key_r();
-			break;
-		case 'O':
-		case 'o':
-			drawOrbits = !drawOrbits;
-			break;
-		case 27:	// tecla esc
-			exit(1);
-		default:
-			// Do nothing...
-			break;
-		}
-	}
-}
-
 // Callback function to handle mouse movements
 void handleMouseMove(int mouseX, int mouseY)
 {
 	cam->handleMouseMove(mouseX, mouseY);
 }
-
 
 static void SpecialKeyFunc(int Key, int x, int y)
 {
@@ -563,9 +477,228 @@ void initSistemaSolar()
 	neptuno.SetValues(323, 0.03538*escalapp, 0, 165.8, textures[8]);
 	load_tga_image("neptune", textures[8]);
 	sistemasolar[8] = neptuno;
-
-
 }
+
+int changeWindowmode();
+void handleKeypress(int, int);
+void AppStart();
+
+int changeWindowMode(){
+
+	GLFWvidmode desktop;
+	glfwGetDesktopMode(&desktop);
+
+	if (gameMode){
+		//Passar para modo janela
+		glfwCloseWindow();
+
+		// get the current Desktop screen resolution and colour depth
+		// open the window at the current Desktop resolution and colour depth
+		if (!glfwOpenWindow(
+			800,
+			600,
+			desktop.RedBits,
+			desktop.GreenBits,
+			desktop.BlueBits,
+			8,          // alpha bits
+			32,         // depth bits
+			0,          // stencil bits
+			GLFW_WINDOW
+			)) {
+			std::cout << "Failed to open window window!" << std::endl;
+			glfwTerminate();
+			return GLFW_WINDOW_ERROR;
+		}
+		gameMode = false;
+
+		AppStart();
+	}
+	else{
+		//Passar para o modo de jogo
+		glfwCloseWindow();
+
+		// open the window at the current Desktop resolution and colour depth
+		if (!glfwOpenWindow(
+			desktop.Width,
+			desktop.Height,
+			desktop.RedBits,
+			desktop.GreenBits,
+			desktop.BlueBits,
+			8,          // alpha bits
+			32,         // depth bits
+			0,          // stencil bits
+			GLFW_FULLSCREEN
+			)) {
+			std::cout << "Failed to open fullscreen window!" << std::endl;
+			glfwTerminate();
+			return GLFW_WINDOW_ERROR;
+		}
+		gameMode = true;
+
+		AppStart();
+	}
+}
+
+// Callback function to handle keypresses
+void handleKeypress(int theKey, int theAction)
+{
+	// If a key is pressed, toggle the relevant key-press flag
+	if (theAction == GLFW_PRESS)
+	{
+		switch (theKey)
+		{
+		case 'W':
+			cam->holdingForward = true;
+			break;
+		case 'S':
+			cam->holdingBackward = true;
+			break;
+		case 'A':
+			cam->holdingLeftStrafe = true;
+			break;
+		case 'D':
+			cam->holdingRightStrafe = true;
+			break;
+		case 'Q':
+			cam->holdingUp = true;
+			break;
+		case 'E':
+			cam->holdingDown = true;
+			break;
+		case 'M':
+		case 'm':
+			//Mudar o tipo de janela
+			changeGameModeActive = true;
+			break;
+		case GLFW_KEY_UP:
+			spinMode = true;
+			holdingMoreSimulationSpeed = true;
+			break;
+		case GLFW_KEY_DOWN:
+			holdingLessSimulationSpeed = true;
+			break;
+		default:
+			// Do nothing...
+			break;
+		}
+	}
+	else // If a key is released, toggle the relevant key-release flag
+	{
+		switch (theKey)
+		{
+		case 'W':
+			cam->holdingForward = false;
+			break;
+		case 'S':
+			cam->holdingBackward = false;
+			break;
+		case 'A':
+			cam->holdingLeftStrafe = false;
+			break;
+		case 'D':
+			cam->holdingRightStrafe = false;
+			break;
+		case 'Q':
+			cam->holdingUp = false;
+			break;
+		case 'E':
+			cam->holdingDown = false;
+			break;
+		case GLFW_KEY_UP:
+			holdingMoreSimulationSpeed = false;
+			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
+			break;
+		case GLFW_KEY_DOWN:
+			holdingLessSimulationSpeed = false;
+			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
+			break;
+		case 'R':
+		case 'r':
+			Key_r();
+			break;
+		case 'O':
+		case 'o':
+			drawOrbits = !drawOrbits;
+			break;
+		case 'M':
+		case 'm':
+			//Mudar o tipo de janela
+			if (changeGameModeActive){
+				changeWindowMode();
+				changeGameModeActive = false;
+			}
+			break;
+		case 27:	// tecla esc
+			exit(1);
+		default:
+			// Do nothing...
+			break;
+		}
+	}
+}
+
+void AppStart(){
+	// ----- GLFW Settings -----
+
+	glfwDisable(GLFW_MOUSE_CURSOR); // Hide the mouse cursor
+
+	glfwSwapInterval(0);            // Disable vsync
+
+	// ----- Window and Projection Settings -----
+
+	// Set the window title
+	glfwSetWindowTitle("Solar System FPS Controls Mk2| r3dux.org | Dec 2012");
+
+	// Setup our viewport to be the entire size of the window
+	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
+
+	// Change to the projection matrix, reset the matrix and set up our projection
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	OpenGLInit();
+
+	glGenTextures(numeroPlanetas, textures);
+	initSistemaSolar();
+	initLights();
+
+	// Instantiate our pointer to a Camera object providing it the size of the window
+	cam = new Camera(windowWidth, windowHeight);
+
+	// Set the mouse cursor to the centre of our window
+	glfwSetMousePos(midWindowX, midWindowY);
+	//Handle keyboard events
+	glfwSetKeyCallback(handleKeypress);
+	// Specify the function which should execute when the mouse is moved
+	glfwSetMousePosCallback(handleMouseMove);
+	glfwSetWindowSizeCallback(ResizeWindow);
+
+	// The deltaTime variable keeps track of how much time has elapsed between one frame and the next.
+	// This allows us to perform framerate independent movement i.e. the camera will move at the same
+	// overall speed regardless of whether the app's running at (for example) 6fps, 60fps or 600fps!
+	double deltaTime = 0.0;
+
+	// Flag to keep our main loop running
+	bool running = true;
+
+	std::cout << "Running!" << std::endl;
+
+	while (running)
+	{
+		// Calculate our camera movement
+		cam->move(deltaTime);
+
+		// Draw our scene
+		Animate();
+
+		// exit if ESC was pressed or window was closed
+		running = !glfwGetKey(GLFW_KEY_ESC) && glfwGetWindowParam(GLFW_OPENED);
+
+		// Call our fpsManager to limit the FPS and get the frame duration to pass to the cam->move method
+		deltaTime = fpsManager.enforceFPS();
+	}
+}
+
 
 
 //rota principal
@@ -584,9 +717,6 @@ int main(int argc, char** argv)
 	// Frame counter and window settings variables
 	int redBits = 8, greenBits = 8, blueBits = 8;
 	int alphaBits = 8, depthBits = 24, stencilBits = 0;
-
-	// Flag to keep our main loop running
-	bool running = true;
 
 	// Initialise GLFW
 	if (!glfwInit())
@@ -617,63 +747,7 @@ int main(int argc, char** argv)
 			return GLFW_WINDOW_ERROR;
 	}
 
-
-	// ----- GLFW Settings -----
-
-	glfwDisable(GLFW_MOUSE_CURSOR); // Hide the mouse cursor
-
-	glfwSwapInterval(0);            // Disable vsync
-
-	// ----- Window and Projection Settings -----
-
-	// Set the window title
-	glfwSetWindowTitle("Solar System FPS Controls Mk2| r3dux.org | Dec 2012");
-
-	// Setup our viewport to be the entire size of the window
-	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
-
-	// Change to the projection matrix, reset the matrix and set up our projection
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	OpenGLInit();
-	
-	glGenTextures(numeroPlanetas, textures);
-	initSistemaSolar();
-	initLights();
-
-	// Instantiate our pointer to a Camera object providing it the size of the window
-	cam = new Camera(windowWidth, windowHeight);
-
-	// Set the mouse cursor to the centre of our window
-	glfwSetMousePos(midWindowX, midWindowY);
-	//Handle keyboard events
-	glfwSetKeyCallback(handleKeypress);
-	// Specify the function which should execute when the mouse is moved
-	glfwSetMousePosCallback(handleMouseMove);
-	glfwSetWindowSizeCallback(ResizeWindow);
-
-	// The deltaTime variable keeps track of how much time has elapsed between one frame and the next.
-	// This allows us to perform framerate independent movement i.e. the camera will move at the same
-	// overall speed regardless of whether the app's running at (for example) 6fps, 60fps or 600fps!
-	double deltaTime = 0.0;
-
-	std::cout << "Running!" << std::endl;
-
-	while (running)
-	{
-		// Calculate our camera movement
-		cam->move(deltaTime);
-
-		// Draw our scene
-		Animate();
-
-		// exit if ESC was pressed or window was closed
-		running = !glfwGetKey(GLFW_KEY_ESC) && glfwGetWindowParam(GLFW_OPENED);
-
-		// Call our fpsManager to limit the FPS and get the frame duration to pass to the cam->move method
-		deltaTime = fpsManager.enforceFPS();
-	}
+	AppStart();
 
 	// Clean up GLFW and exit
 	glfwTerminate();
