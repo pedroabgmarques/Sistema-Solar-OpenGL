@@ -242,6 +242,20 @@ void DrawPlanetas(){
 	}
 }
 
+void DrawCamera(){
+	glColor3f(1.0, 0.0, 0.0);
+	glPushMatrix();
+	glTranslatef(-cam->getXPos(), 0, -cam->getZPos());
+	glRotatef(cam->getYRot(), 0.0f, 1.0f, 0.0f); // Rotate our camera on the  y-axis (looking left and right)
+	glBegin(GL_TRIANGLES);
+		glVertex3f(0.0f, 0.0f, 0.0f);
+		glVertex3f(-10.0f, 0.0f, -10.0f);
+		glVertex3f(10.0f, 0.0f, -10.0f);
+	glEnd();
+	glPopMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+}
+
 void DrawLuas()
 {
 	for (int i = 0; i < numeroLuas; i++){
@@ -348,8 +362,8 @@ static void Animate(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glDisable(GL_LIGHTING);
+	DrawCamera();
 	DrawPlanetas();
-	DrawLuas();
 	glEnable(GL_LIGHTING);
 
 
@@ -744,8 +758,6 @@ int main(int argc, char** argv)
 
 	//glutInit(&argc, argv);
 	//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_RGBA);
-
-
 	//glutInitWindowPosition(0, 0);
 	//glutCreateWindow("Sistema Solar");
 	////glutInitWindowSize(1080, 1080);
@@ -780,7 +792,7 @@ int main(int argc, char** argv)
 		8,          // alpha bits
 		32,         // depth bits
 		0,          // stencil bits
-		GLFW_FULLSCREEN 
+		GLFW_FULLSCREEN
 		)) {
 			std::cout << "Failed to open fullscreen window!" << std::endl;
 			glfwTerminate();
