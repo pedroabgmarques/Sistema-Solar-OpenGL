@@ -39,6 +39,8 @@ float simulationSpeedChangeAcceleration = 0.1;
 float simulationSpeedChangeAccelerationOriginal = simulationSpeedChangeAcceleration;
 bool gameMode = true;
 bool changeGameModeActive = false;
+int width, height;
+GLFWvidmode desktop;
 
 //Camara
 Camera *cam;
@@ -91,7 +93,6 @@ static void Key_up(void)
 static void Key_down(void)
 {
 }
-
 
 static void initLights(void)
 {
@@ -168,7 +169,6 @@ void applymaterial(int type)
 	}
 }
 
-
 void UpdatePlanetas(){
 	for (int i = 0; i < numeroPlanetas; i++){
 		sistemasolar[i].Update(simulationSpeed);
@@ -187,8 +187,6 @@ void UpdateLuas()
 		luas[i].Update(simulationSpeed, posicaoPlaneta);
 	}
 }
-
-
 
 void draworbit(float centerX, float centerY, float centerZ, GLint radius)
 {
@@ -243,6 +241,7 @@ void DrawPlanetas(){
 		
 	}
 }
+
 void DrawLuas()
 {
 	for (int i = 0; i < numeroLuas; i++){
@@ -317,9 +316,18 @@ static void Animate(void)
 
 	applyLights();
 
+	//glViewport(0, 0, width, height);
+	glViewport(0, 0, width, height);
+
 	//Desenha os planetas
 	DrawPlanetas();
 	DrawLuas();
+
+	// Draw on left side
+	glViewport(width - 200, height - 200, width, height);
+	gluOrtho2D(0, 0, 200, 200);
+	DrawPlanetas();
+	
 
 	glfwSwapBuffers(); // Swap the buffers to display the scene (so we don't have to watch it being drawn!)
 
@@ -485,18 +493,21 @@ void AppStart();
 
 int changeWindowMode(){
 
-	GLFWvidmode desktop;
+	
 	glfwGetDesktopMode(&desktop);
 
 	if (gameMode){
 		//Passar para modo janela
 		glfwCloseWindow();
 
+		width = 800;
+		height = 600;
+
 		// get the current Desktop screen resolution and colour depth
 		// open the window at the current Desktop resolution and colour depth
 		if (!glfwOpenWindow(
-			800,
-			600,
+			width,
+			height,
 			desktop.RedBits,
 			desktop.GreenBits,
 			desktop.BlueBits,
@@ -517,10 +528,13 @@ int changeWindowMode(){
 		//Passar para o modo de jogo
 		glfwCloseWindow();
 
+		width = desktop.Width;
+		height = desktop.Height;
+
 		// open the window at the current Desktop resolution and colour depth
 		if (!glfwOpenWindow(
-			desktop.Width,
-			desktop.Height,
+			width,
+			height,
 			desktop.RedBits,
 			desktop.GreenBits,
 			desktop.BlueBits,
@@ -729,6 +743,9 @@ int main(int argc, char** argv)
 	// get the current Desktop screen resolution and colour depth
 	GLFWvidmode desktop;
 	glfwGetDesktopMode(&desktop);
+
+	width = desktop.Width;
+	height = desktop.Height;
 
 	// open the window at the current Desktop resolution and colour depth
 	if (!glfwOpenWindow(
