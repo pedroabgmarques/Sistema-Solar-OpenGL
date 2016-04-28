@@ -49,6 +49,17 @@ float arcCamX = 0;
 float arcCamY = 0;
 float arcCamZ = 0;
 float arcCamRadius = 0;
+const int numeroEstrelas = 5000;
+
+struct ESTRELA
+{
+	Vec3<float> posicao;
+	float luminosity;
+};
+
+ESTRELA estrelas[numeroEstrelas];
+
+
 
 //Camara
 Camera *cam;
@@ -300,6 +311,32 @@ void DrawLuas()
 
 	}
 }
+
+void initEstrelas(){
+	int max = 1000;
+	int min = -1000;
+
+	for (int i = 0; i < numeroEstrelas; i++){
+		estrelas[i].luminosity = ((double)rand() / (RAND_MAX));
+		estrelas[i].posicao = Vec3<float>(rand() % (max - min) + min, rand() % (max - min) + min, rand() % (max - min) + min);
+	}
+}
+
+void DrawStars(){
+	
+	glPushMatrix();
+	glDisable(GL_LIGHTING);
+	glBegin(GL_POINTS);
+	for (int i = 1; i < numeroEstrelas; i++)
+	{
+		glColor3f(estrelas[i].luminosity, estrelas[i].luminosity, estrelas[i].luminosity);
+		glVertex3f(estrelas[i].posicao.getX(), estrelas[i].posicao.getY(), estrelas[i].posicao.getZ());
+	}
+	glEnd();
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
+}
+
 //isto pode ou nao ser alterado
 static void Animate(void)
 {
@@ -361,9 +398,10 @@ static void Animate(void)
 	glViewport(0, 0, width, height);
 	ResizeWindow(width, height);
 
-	//Desenha os planetas
+	//Desenha os planetas, luas e estrelas
 	DrawPlanetas(false);
 	DrawLuas();
+	DrawStars();
 
 	// Draw on left side
 
@@ -743,7 +781,7 @@ void AppStart(){
 	// ----- Window and Projection Settings -----
 
 	// Set the window title
-	glfwSetWindowTitle("Solar System FPS Controls Mk2| r3dux.org | Dec 2012");
+	glfwSetWindowTitle("Solar System Model | PMarques / VGomes | April 2016");
 
 	// Setup our viewport to be the entire size of the window
 	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
@@ -757,6 +795,7 @@ void AppStart(){
 	glGenTextures(numeroPlanetas, textures);
 	initSistemaSolar();
 	initLights();
+	initEstrelas();
 
 	// Instantiate our pointer to a Camera object providing it the size of the window
 	cam = new Camera(windowWidth, windowHeight);
@@ -835,7 +874,7 @@ int main(int argc, char** argv)
 		8,          // alpha bits
 		32,         // depth bits
 		0,          // stencil bits
-		GLFW_WINDOW
+		GLFW_FULLSCREEN
 		)) {
 			std::cout << "Failed to open fullscreen window!" << std::endl;
 			glfwTerminate();
