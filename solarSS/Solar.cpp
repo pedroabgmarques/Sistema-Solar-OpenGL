@@ -78,7 +78,6 @@ static void SpecialKeyFunc(int Key, int x, int y)
 	}
 }
 
-
 static void Key_r(void)
 {
 	
@@ -211,7 +210,7 @@ void draworbit(float centerX, float centerY, float centerZ, GLint radius)
 	//glEnable(GL_LIGHTING);
 }
 
-void DrawPlanetas(){
+void DrawPlanetas(bool minimap){
 	for (int i = numeroPlanetas; i > -1; i--){
 
 		//Se é o sol, material emissive
@@ -224,7 +223,7 @@ void DrawPlanetas(){
 
 		glPushMatrix();
 
-		sistemasolar[i].Draw(mysolid);
+		sistemasolar[i].Draw(mysolid, minimap);
 
 		glPopMatrix();
 
@@ -335,7 +334,7 @@ static void Animate(void)
 	ResizeWindow(width, height);
 
 	//Desenha os planetas
-	DrawPlanetas();
+	DrawPlanetas(false);
 	DrawLuas();
 
 	// Draw on left side
@@ -363,10 +362,8 @@ static void Animate(void)
 	glLoadIdentity();
 	glDisable(GL_LIGHTING);
 	DrawCamera();
-	DrawPlanetas();
+	DrawPlanetas(true);
 	glEnable(GL_LIGHTING);
-
-
 
 	glfwSwapBuffers(); // Swap the buffers to display the scene (so we don't have to watch it being drawn!)
 

@@ -1,5 +1,88 @@
-﻿Build started 4/28/2016 12:14:10 AM.
+﻿Build started 4/28/2016 1:18:17 AM.
+     1>Project "C:\Users\nlopes\Documents\IPCA\EDJD\2º Ano\2º Semestre\Programação 3D\SistemaSolar\solarSS\Solar.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\DEPENDENCIES\glfw /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /Gy- /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Debug\\" /Fd".\Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Camera.cpp lua.cpp planeta.cpp Solar.cpp tga.cpp
+         tga.cpp
+         Solar.cpp
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(1): warning C4005: '_CRT_SECURE_NO_WARNINGS' : macro redefinition
+                 command-line arguments :  see previous definition of '_CRT_SECURE_NO_WARNINGS'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\camera.h(68): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\camera.h(70): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\fpsmanager.hpp(83): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\fpsmanager.hpp(111): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\fpsmanager.hpp(137): warning C4244: 'return' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\fpsmanager.hpp(145): warning C4244: '=' : conversion from 'const double' to 'int', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\fpsmanager.hpp(150): warning C4244: '=' : conversion from 'const double' to 'int', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\fpsmanager.hpp(168): warning C4305: '=' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(38): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(52): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(114): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(197): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(236): warning C4244: 'argument' : conversion from 'float' to 'GLint', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(247): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(248): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(282): warning C4244: 'argument' : conversion from 'float' to 'GLint', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(299): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(300): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(304): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(311): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(315): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(345): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(346): warning C4244: 'argument' : conversion from 'double' to 'GLint', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(469): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(474): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(474): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(479): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(479): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(484): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(484): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(489): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(489): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(493): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(493): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(498): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(498): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(503): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(503): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(507): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(507): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(511): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(516): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(521): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(521): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(716): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         planeta.cpp
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\planeta.cpp(49): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\planeta.cpp(50): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\planeta.cpp(53): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\planeta.cpp(66): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+         lua.cpp
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\lua.cpp(48): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\lua.cpp(49): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\lua.cpp(52): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
+         Camera.cpp
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\camera.h(68): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\camera.h(70): warning C4244: 'return' : conversion from 'double' to 'float', possible loss of data
+     1>c:\program files (x86)\windows kits\8.1\include\shared\minwindef.h(130): warning C4005: 'APIENTRY' : macro redefinition
+                 c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\gl\glfw.h(74) : see previous definition of 'APIENTRY'
+     1>c:\program files (x86)\windows kits\8.1\include\um\wingdi.h(32): warning C4005: 'WINGDIAPI' : macro redefinition
+                 c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\gl\glfw.h(91) : see previous definition of 'WINGDIAPI'
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\camera.cpp(10): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\camera.cpp(11): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\camera.cpp(14): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\camera.cpp(15): warning C4244: '=' : conversion from 'float' to 'int', possible loss of data
+         Generating Code...
+     1>c:\users\nlopes\documents\ipca\edjd\2º ano\2º semestre\programação 3d\sistemasolar\solarss\solar.cpp(590): warning C4715: 'changeWindowMode' : not all control paths return a value
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Debug\Solar.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\DEPENDENCIES\glfw odbc32.lib odbccp32.lib opengl32.lib GLFW.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:".\Debug\Solar.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Debug\Solar.lib" /MACHINE:X86 /SAFESEH .\Debug\Camera.obj
+         .\Debug\lua.obj
+         .\Debug\planeta.obj
+         .\Debug\Solar.obj
+         .\Debug\tga.obj
+     1>Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+         Solar.vcxproj -> C:\Users\nlopes\Documents\IPCA\EDJD\2º Ano\2º Semestre\Programação 3D\SistemaSolar\solarSS\.\Debug\Solar.exe
+     1>Done Building Project "C:\Users\nlopes\Documents\IPCA\EDJD\2º Ano\2º Semestre\Programação 3D\SistemaSolar\solarSS\Solar.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.02
+Time Elapsed 00:00:04.33

@@ -20,7 +20,7 @@ void Planeta::SetValues(float distanciaSol, float raioPlaneta, float rotacao,flo
 	iterator = 0;
 
 }
-void Planeta::Draw(GLUquadric *mysolid)
+void Planeta::Draw(GLUquadric *mysolid, bool minimap)
 {
 	
 
@@ -37,6 +37,9 @@ void Planeta::Draw(GLUquadric *mysolid)
 	//Endireitar os planetas
 	glRotatef(-90.0, 1.0, 0.0, 0.0);
 
+	if (minimap){
+		glScalef(8.0, 8, 8);
+	}
 	gluSphere(mysolid, _raioPlaneta, 64, 64);
 
 }
