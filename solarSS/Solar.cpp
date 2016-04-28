@@ -232,7 +232,7 @@ void DrawPlanetas(bool minimap){
 
 		glPopMatrix();
 
-		if (drawOrbits){
+		if ((drawOrbits && !minimap) || minimap){
 			draworbit(
 				sistemasolar[0].GetX(),
 				sistemasolar[0].GetY(),
@@ -254,7 +254,6 @@ void DrawCamera(){
 	}
 	else{
 		glTranslatef(arcCamX, 0, arcCamZ);
-		//glRotatef((arcCamAngle * 3.1415) / 180, 0.0f, 1.0f, 0.0f);
 		glRotatef((arcCamAngle * 180) / PI, 0.0f, 1.0f, 0.0f);
 	}
 	
