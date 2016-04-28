@@ -16,6 +16,7 @@
 #include <vector>
 #include "Camera.h"
 #include "FPSManager.hpp"
+#include "Vec3.h"
 
 // Specify default namespace for commonly used elements
 using std::string;
@@ -45,7 +46,9 @@ GLFWvidmode desktop;
 bool arcCam = false;
 float arcCamAngle = 0;
 float arcCamX = 0;
+float arcCamY = 0;
 float arcCamZ = 0;
+float arcCamRadius = 0;
 
 //Camara
 Camera *cam;
@@ -253,7 +256,7 @@ void DrawCamera(){
 		glRotatef(-cam->getYRot(), 0.0f, 1.0f, 0.0f);
 	}
 	else{
-		glTranslatef(arcCamX, 0, arcCamZ);
+		glTranslatef(arcCamX, arcCamY, arcCamZ);
 		glRotatef((arcCamAngle * 180) / PI, 0.0f, 1.0f, 0.0f);
 	}
 	
@@ -318,9 +321,8 @@ static void Animate(void)
 		glTranslatef(-cam->getXPos(), -cam->getYPos(), -cam->getZPos());
 	}
 	else{
-		float radius = 100.0;
-		arcCamX = radius * sin(arcCamAngle);
-		arcCamZ = radius * cos(arcCamAngle);
+		arcCamX = arcCamRadius * sin(arcCamAngle);
+		arcCamZ = arcCamRadius * cos(arcCamAngle);
 		gluLookAt(arcCamX, 30, arcCamZ, 0, 0, 0, 0, 1, 0);
 		arcCamAngle += 0.01;
 		if (arcCamAngle > 2 * PI){
@@ -706,6 +708,20 @@ void handleKeypress(int theKey, int theAction)
 			break;
 		case 'C':
 		case 'c':
+			//Tentativa de manter as posições, não funciona bem,
+			//teria que ser mais trabalhado.
+
+			/*if (arcCam){
+				cam->setPositionX(arcCamX);
+				cam->setPositionY(arcCamY);
+				cam->setPositionZ(arcCamZ);
+			}
+			else{
+				arcCamX = cam->getXPos();
+				arcCamY = cam->getYPos();
+				arcCamZ = cam->getZPos();
+			}*/
+			arcCamRadius = 100;
 			arcCam = !arcCam;
 			break;
 		case 27:	// tecla esc
