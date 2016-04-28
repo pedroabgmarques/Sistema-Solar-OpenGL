@@ -3,6 +3,7 @@
 #ifndef GL_MULTISAMPLE_ARB
 #define GL_MULTISAMPLE_ARB  0x809D
 #endif
+#define PI 3.14159265
 
 #include "Solar.h"   
 #include <stdlib.h> 
@@ -41,6 +42,10 @@ bool gameMode = true;
 bool changeGameModeActive = false;
 int width, height;
 GLFWvidmode desktop;
+bool arcCam = false;
+float arcCamAngle = 0;
+float arcCamX = 0;
+float arcCamZ = 0;
 
 //Camara
 Camera *cam;
@@ -242,12 +247,21 @@ void DrawPlanetas(bool minimap){
 }
 
 void DrawCamera(){
-	glColor3f(1.0, 0.0, 0.0);
 	glPushMatrix();
-	glTranslatef(cam->getXPos(), 0, cam->getZPos());
-	glRotatef(-cam->getYRot(), 0.0f, 1.0f, 0.0f); // Rotate our camera on the  y-axis (looking left and right)
+	if (!arcCam){
+		glTranslatef(cam->getXPos(), 0, cam->getZPos());
+		glRotatef(-cam->getYRot(), 0.0f, 1.0f, 0.0f);
+	}
+	else{
+		glTranslatef(arcCamX, 0, arcCamZ);
+		//glRotatef((arcCamAngle * 3.1415) / 180, 0.0f, 1.0f, 0.0f);
+		glRotatef((arcCamAngle * 180) / PI, 0.0f, 1.0f, 0.0f);
+	}
+	
 	glBegin(GL_TRIANGLES);
+		glColor3f(0.0, 1.0, 0.0);
 		glVertex3f(0.0f, 0.0f, 0.0f);
+		glColor3f(1.0, 0.0, 0.0);
 		glVertex3f(10.0f, 0.0f, 10.0f);
 		glVertex3f(-10.0f, 0.0f, 10.0f);
 	glEnd();
@@ -295,13 +309,26 @@ static void Animate(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
  
-	// Move the camera to our location in space
-	glRotatef(cam->getXRot(), 1.0f, 0.0f, 0.0f); // Rotate our camera on the x-axis (looking up and down)
-	glRotatef(cam->getYRot(), 0.0f, 1.0f, 0.0f); // Rotate our camera on the  y-axis (looking left and right)
- 
-	// Translate the ModelView matrix to the position of our camera - everything should now be drawn relative
-	// to this position!
-	glTranslatef( -cam->getXPos(), -cam->getYPos(), -cam->getZPos() );
+	if (!arcCam){
+		//MOVIMENTO E ROTAÇÃO DA CAMARA COM TECLADO E RATO
+		// Move the camera to our location in space
+		glRotatef(cam->getXRot(), 1.0f, 0.0f, 0.0f); // Rotate our camera on the x-axis (looking up and down)
+		glRotatef(cam->getYRot(), 0.0f, 1.0f, 0.0f); // Rotate our camera on the  y-axis (looking left and right)
+		// Translate the ModelView matrix to the position of our camera - everything should now be drawn relative
+		// to this position!
+		glTranslatef(-cam->getXPos(), -cam->getYPos(), -cam->getZPos());
+	}
+	else{
+		float radius = 100.0;
+		arcCamX = radius * sin(arcCamAngle);
+		arcCamZ = radius * cos(arcCamAngle);
+		gluLookAt(arcCamX, 30, arcCamZ, 0, 0, 0, 0, 1, 0);
+		arcCamAngle += 0.01;
+		if (arcCamAngle > 2 * PI){
+			arcCamAngle = 0;
+		}
+	}
+	
 	
 	if (spinMode) {
 
@@ -678,6 +705,10 @@ void handleKeypress(int theKey, int theAction)
 				changeGameModeActive = false;
 			}
 			break;
+		case 'C':
+		case 'c':
+			arcCam = !arcCam;
+			break;
 		case 27:	// tecla esc
 			exit(1);
 		default:
@@ -789,7 +820,7 @@ int main(int argc, char** argv)
 		8,          // alpha bits
 		32,         // depth bits
 		0,          // stencil bits
-		GLFW_FULLSCREEN
+		GLFW_WINDOW
 		)) {
 			std::cout << "Failed to open fullscreen window!" << std::endl;
 			glfwTerminate();
