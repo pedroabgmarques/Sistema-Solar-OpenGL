@@ -1,4 +1,4 @@
-﻿Build started 27/04/2016 18:08:17.
+﻿Build started 28/04/2016 20:57:20.
      1>Project "C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Solar.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\DEPENDENCIES\glfw /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_WARNINGS /D _VC80_UPGRADE=0x0600 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /Gy- /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\Debug\\" /Fd".\Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Solar.cpp
@@ -13,62 +13,48 @@
      1>c:\users\vitor\documents\sistema-solar-opengl\solarss\fpsmanager.hpp(145): warning C4244: '=' : conversion from 'const double' to 'int', possible loss of data
      1>c:\users\vitor\documents\sistema-solar-opengl\solarss\fpsmanager.hpp(150): warning C4244: '=' : conversion from 'const double' to 'int', possible loss of data
      1>c:\users\vitor\documents\sistema-solar-opengl\solarss\fpsmanager.hpp(168): warning C4305: '=' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(38): warning C4305: 'initializing' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(48): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(201): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(287): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(326): warning C4244: 'argument' : conversion from 'float' to 'GLint', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(357): warning C4244: 'argument' : conversion from 'float' to 'GLint', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(374): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(375): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(379): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(386): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(390): warning C4305: '+=' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(512): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(517): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(517): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(522): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(522): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(527): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(527): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(532): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(532): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(537): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(537): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(542): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(542): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(547): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(547): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(551): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(551): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(555): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(560): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(565): warning C4305: 'argument' : truncation from 'double' to 'float'
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(565): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(746): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(39): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(49): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(267): warning C4305: 'argument' : truncation from 'double' to 'GLfloat'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(353): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(392): warning C4244: 'argument' : conversion from 'float' to 'GLint', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(423): warning C4244: 'argument' : conversion from 'float' to 'GLint', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(440): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(441): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(445): warning C4244: 'argument' : conversion from 'double' to 'GLfloat', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(452): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(456): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(577): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(582): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(582): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(587): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(587): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(592): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(592): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(597): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(597): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(602): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(602): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(607): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(607): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(612): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(612): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(616): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(616): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(620): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(625): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(630): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(630): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\vitor\documents\sistema-solar-opengl\solarss\solar.cpp(829): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\Debug\Solar.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\DEPENDENCIES\glfw odbc32.lib odbccp32.lib opengl32.lib GLFW.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:".\Debug\Solar.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Debug\Solar.lib" /MACHINE:X86 /SAFESEH .\Debug\Camera.obj
          .\Debug\lua.obj
          .\Debug\planeta.obj
          .\Debug\Solar.obj
          .\Debug\tga.obj
-     1>Camera.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
-     1>GLFW.lib(enable.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(fullscreen.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(glext.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(init.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(input.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(time.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(win32_enable.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(win32_fullscreen.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(win32_glext.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(win32_init.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(win32_time.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(win32_window.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
-     1>GLFW.lib(window.obj) : warning LNK4204: 'C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Debug\vc120.pdb' is missing debugging information for referencing module; linking object as if no debug info
          Solar.vcxproj -> C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\.\Debug\Solar.exe
      1>Done Building Project "C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Solar.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.48
+Time Elapsed 00:00:03.25
