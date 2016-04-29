@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿Build started 28/04/2016 20:57:20.
      1>Project "C:\Users\vitor\Documents\Sistema-Solar-OpenGL\solarSS\Solar.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
@@ -58,3 +59,10 @@
 Build succeeded.
 
 Time Elapsed 00:00:03.25
+=======
+﻿Build started 4/29/2016 2:05:58 AM.
+
+Build succeeded.
+
+Time Elapsed 00:00:00.01
+>>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772

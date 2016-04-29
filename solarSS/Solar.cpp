@@ -3,6 +3,7 @@
 #ifndef GL_MULTISAMPLE_ARB
 #define GL_MULTISAMPLE_ARB  0x809D
 #endif
+#define PI 3.14159265
 
 #include "Solar.h"   
 #include <stdlib.h> 
@@ -15,7 +16,11 @@
 #include <vector>
 #include "Camera.h"
 #include "FPSManager.hpp"
+<<<<<<< HEAD
 #include <windows.h>
+=======
+#include "Vec3.h"
+>>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
 
 // Specify default namespace for commonly used elements
 using std::string;
@@ -38,6 +43,28 @@ bool holdingMoreSimulationSpeed = false;
 bool holdingLessSimulationSpeed = false;
 float simulationSpeedChangeAcceleration = 0.1;
 float simulationSpeedChangeAccelerationOriginal = simulationSpeedChangeAcceleration;
+bool gameMode = true;
+bool changeGameModeActive = false;
+int width, height;
+GLFWvidmode desktop;
+bool arcCam = false;
+float arcCamAngle = 0;
+float arcCamX = 0;
+float arcCamY = 0;
+float arcCamZ = 0;
+float arcCamRadius = 0;
+const int numeroEstrelas = 5000;
+
+//Estrelas
+struct ESTRELA
+{
+	Vec3<float> posicao;
+	float luminosity;
+};
+ESTRELA estrelas[numeroEstrelas];
+
+//Display Lists
+GLuint displayListIndex;
 
 //Camara
 Camera *cam;
@@ -57,6 +84,7 @@ const int numeroLuas = 3;
 Lua luas[numeroLuas];
 GLuint texturasLua[numeroLuas];
 
+<<<<<<< HEAD
 //skybox stuff
 void display(void);
 void funcmyDL(void);
@@ -210,14 +238,15 @@ void handleKeypress(int theKey, int theAction)
 	}
 }
 
+=======
+>>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
 // Callback function to handle mouse movements
 void handleMouseMove(int mouseX, int mouseY)
 {
 	cam->handleMouseMove(mouseX, mouseY);
 }
 
-
-static void SpecialKeyFunc(int Key, int x, int y)
+void SpecialKeyFunc(int Key, int x, int y)
 {
 	switch (Key) {
 	case GLUT_KEY_UP:
@@ -229,24 +258,22 @@ static void SpecialKeyFunc(int Key, int x, int y)
 	}
 }
 
-
-static void Key_r(void)
+void Key_r(void)
 {
 	
 	spinMode = !spinMode;	// liga e desliga a animaçao
 	
 }
 
-static void Key_up(void)
+void Key_up(void)
 {
 }
 
-static void Key_down(void)
+void Key_down(void)
 {
 }
 
-
-static void initLights(void)
+void initLights(void)
 {
 	// Define a luz ambiente global
 	GLfloat global_ambient[] = { 0.05f, 0.05f, 0.05f, 1.0f };
@@ -321,7 +348,6 @@ void applymaterial(int type)
 	}
 }
 
-
 void UpdatePlanetas(){
 	for (int i = 0; i < numeroPlanetas; i++){
 		sistemasolar[i].Update(simulationSpeed);
@@ -341,13 +367,10 @@ void UpdateLuas()
 	}
 }
 
-
-
 void draworbit(float centerX, float centerY, float centerZ, GLint radius)
 {
 	//glDisable(GL_LIGHTING);
 	glBegin(GL_LINE_LOOP);
-
 	float x, z;
 
 	for (float i = 0; i<(3.14 * 2); i += (3.14 * 2) / 360)
@@ -361,41 +384,74 @@ void draworbit(float centerX, float centerY, float centerZ, GLint radius)
 
 		glNormal3f(normal.getX(), 0, normal.getZ());
 	}
-
 	glEnd();
 	//glEnable(GL_LIGHTING);
 }
 
-void DrawPlanetas(){
+void initPlanetOrbits(){
+	glNewList(displayListIndex + 1, GL_COMPILE);
+	for (int i = 0; i < numeroPlanetas; i++){
+		glBindTexture(GL_TEXTURE_2D, sistemasolar[i].Gettextura());
+		draworbit(
+			sistemasolar[0].GetX(),
+			sistemasolar[0].GetY(),
+			sistemasolar[0].GetZ(),
+			sistemasolar[i].GetDistanciaSol()
+			);
+	}
+	glEndList();
+}
+
+void DrawPlanetas(bool minimap){
 	for (int i = numeroPlanetas; i > -1; i--){
 
 		//Se é o sol, material emissive
 		if (i == 0){
 			applymaterial(3);
+			if(!minimap) glDisable(GL_FOG);
 		}
 		else{
 			applymaterial(0);
+			if (!minimap) glEnable(GL_FOG);
 		}
 
 		glPushMatrix();
 
-		sistemasolar[i].Draw(mysolid);
+		sistemasolar[i].Draw(mysolid, minimap);
 
 		glPopMatrix();
 
-		if (drawOrbits){
-			draworbit(
-				sistemasolar[0].GetX(),
-				sistemasolar[0].GetY(),
-				sistemasolar[0].GetZ(),
-				sistemasolar[i].GetDistanciaSol()
-			);
+		if ((drawOrbits && !minimap) || minimap){
+			glCallList(displayListIndex + 1);
 		}
 		
 		
 		
 	}
 }
+
+void DrawCamera(){
+	glPushMatrix();
+	if (!arcCam){
+		glTranslatef(cam->getXPos(), 0, cam->getZPos());
+		glRotatef(-cam->getYRot(), 0.0f, 1.0f, 0.0f);
+	}
+	else{
+		glTranslatef(arcCamX, arcCamY, arcCamZ);
+		glRotatef((arcCamAngle * 180) / PI, 0.0f, 1.0f, 0.0f);
+	}
+	
+	glBegin(GL_TRIANGLES);
+		glColor3f(0.0, 1.0, 0.0);
+		glVertex3f(0.0f, 0.0f, 0.0f);
+		glColor3f(1.0, 0.0, 0.0);
+		glVertex3f(10.0f, 0.0f, 10.0f);
+		glVertex3f(-10.0f, 0.0f, 10.0f);
+	glEnd();
+	glPopMatrix();
+	glColor3f(1.0, 1.0, 1.0);
+}
+
 void DrawLuas()
 {
 	for (int i = 0; i < numeroLuas; i++){
@@ -425,8 +481,34 @@ void DrawLuas()
 
 	}
 }
+
+void initEstrelas(){
+	int max = 1000;
+	int min = -1000;
+
+	for (int i = 0; i < numeroEstrelas; i++){
+		estrelas[i].luminosity = ((double)rand() / (RAND_MAX));
+		estrelas[i].posicao = Vec3<float>(rand() % (max - min) + min, rand() % (max - min) + min, rand() % (max - min) + min);
+	}
+
+	glNewList(displayListIndex, GL_COMPILE);
+		glDisable(GL_FOG);
+		glDisable(GL_LIGHTING);
+		glBegin(GL_POINTS);
+		for (int i = 1; i < numeroEstrelas; i++)
+		{
+			glColor3f(estrelas[i].luminosity, estrelas[i].luminosity, estrelas[i].luminosity);
+			glVertex3f(estrelas[i].posicao.getX(), estrelas[i].posicao.getY(), estrelas[i].posicao.getZ());
+		}
+		glEnd();
+		glEnable(GL_LIGHTING);
+		glEnable(GL_FOG);
+		
+	glEndList();
+}
+
 //isto pode ou nao ser alterado
-static void Animate(void)
+void Animate(void)
 {
 
 	// limpa a janela
@@ -436,13 +518,25 @@ static void Animate(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
  
-	// Move the camera to our location in space
-	glRotatef(cam->getXRot(), 1.0f, 0.0f, 0.0f); // Rotate our camera on the x-axis (looking up and down)
-	glRotatef(cam->getYRot(), 0.0f, 1.0f, 0.0f); // Rotate our camera on the  y-axis (looking left and right)
- 
-	// Translate the ModelView matrix to the position of our camera - everything should now be drawn relative
-	// to this position!
-	glTranslatef( -cam->getXPos(), -cam->getYPos(), -cam->getZPos() );
+	if (!arcCam){
+		//MOVIMENTO E ROTAÇÃO DA CAMARA COM TECLADO E RATO
+		// Move the camera to our location in space
+		glRotatef(cam->getXRot(), 1.0f, 0.0f, 0.0f); // Rotate our camera on the x-axis (looking up and down)
+		glRotatef(cam->getYRot(), 0.0f, 1.0f, 0.0f); // Rotate our camera on the  y-axis (looking left and right)
+		// Translate the ModelView matrix to the position of our camera - everything should now be drawn relative
+		// to this position!
+		glTranslatef(-cam->getXPos(), -cam->getYPos(), -cam->getZPos());
+	}
+	else{
+		arcCamX = arcCamRadius * sin(arcCamAngle);
+		arcCamZ = arcCamRadius * cos(arcCamAngle);
+		gluLookAt(arcCamX, 30, arcCamZ, 0, 0, 0, 0, 1, 0);
+		arcCamAngle += 0.01;
+		if (arcCamAngle > 2 * PI){
+			arcCamAngle = 0;
+		}
+	}
+	
 	
 	if (spinMode) {
 
@@ -470,10 +564,50 @@ static void Animate(void)
 
 	applyLights();
 
-	//Desenha os planetas
-	DrawPlanetas();
+	//glViewport(0, 0, width, height);
+	glViewport(0, 0, width, height);
+	ResizeWindow(width, height);
+
+	//Desenha os planetas, luas e estrelas
+	DrawPlanetas(false);
 	DrawLuas();
+<<<<<<< HEAD
 	funcmyDL();
+=======
+	
+	//Desenhar displayLists de estrelas
+	glCallList(displayListIndex);
+
+	// MINIMAP
+	float ratio;
+	// Prevenir a divisão por zero, se a janela for muito pequena
+	if (height == 0) height = 1;
+	ratio = 1.0 * width / height;
+	glViewport(width / 1.5, height / 1.5, width / 2, height / 2);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(45, ratio, 1, 5000);
+
+	//HERE BE DRAGONS AND MAGIC NUMBERS
+	float offsetX;
+	if (width > 800) {
+		offsetX = -30.0;
+	}
+	else{
+		offsetX = -90.0;
+	}
+	glTranslatef(offsetX, -150.0, 0.0);
+	gluLookAt(0.0, 1300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glDisable(GL_LIGHTING);
+	glDisable(GL_FOG);
+	DrawCamera();
+	DrawPlanetas(true);
+	glEnable(GL_FOG);
+	glEnable(GL_LIGHTING);
+
+>>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
 	glfwSwapBuffers(); // Swap the buffers to display the scene (so we don't have to watch it being drawn!)
 
 }
@@ -502,7 +636,7 @@ void OpenGLInit(void)
 	glEnable(GL_DEPTH_TEST);
 }
 
-static void ResizeWindow(int w, int h)
+void ResizeWindow(int w, int h)
 {
 	windowWidth = w;
 	windowHeight = h;
@@ -518,7 +652,7 @@ static void ResizeWindow(int w, int h)
 	// prepara a vista da matrix (nao muito bem!)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, aspectRatio, 1, 600);
+	gluPerspective(60.0, aspectRatio, 1, 5000);
 
 	// seleciona o modelo de vista da matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -630,10 +764,9 @@ void initSistemaSolar()
 	neptuno.SetValues(323, 0.03538*escalapp, 0, 165.8, textures[8]);
 	load_tga_image("neptune", textures[8]);
 	sistemasolar[8] = neptuno;
-
-
 }
 
+<<<<<<< HEAD
 //supostamente isto seleciona a textura
 void funcmyDL(void)
 {
@@ -757,40 +890,191 @@ int main(int argc, char** argv)
 	// Frame counter and window settings variables
 	int redBits = 8, greenBits = 8, blueBits = 8;
 	int alphaBits = 8, depthBits = 24, stencilBits = 0;
+=======
+int changeWindowmode();
+void handleKeypress(int, int);
+void AppStart();
 
-	// Flag to keep our main loop running
-	bool running = true;
+int changeWindowMode(){
 
-	// Initialise GLFW
-	if (!glfwInit())
-	{
-		std::cout << "Failed to initialise GLFW!" << endl;
-		glfwTerminate();
-		return GLFW_INIT_ERROR;
-	}
-
-	// get the current Desktop screen resolution and colour depth
-	GLFWvidmode desktop;
+	
 	glfwGetDesktopMode(&desktop);
+>>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
 
-	// open the window at the current Desktop resolution and colour depth
-	if (!glfwOpenWindow(
-		desktop.Width,
-		desktop.Height,
-		desktop.RedBits,
-		desktop.GreenBits,
-		desktop.BlueBits,
-		8,          // alpha bits
-		32,         // depth bits
-		0,          // stencil bits
-		GLFW_WINDOW //GLFW_FULLSCREEN
-		)) {
+	if (gameMode){
+		//Passar para modo janela
+		glfwCloseWindow();
+
+		width = 800;
+		height = 600;
+
+		// get the current Desktop screen resolution and colour depth
+		// open the window at the current Desktop resolution and colour depth
+		if (!glfwOpenWindow(
+			width,
+			height,
+			desktop.RedBits,
+			desktop.GreenBits,
+			desktop.BlueBits,
+			8,          // alpha bits
+			32,         // depth bits
+			0,          // stencil bits
+			GLFW_WINDOW
+			)) {
+			std::cout << "Failed to open window window!" << std::endl;
+			glfwTerminate();
+			return GLFW_WINDOW_ERROR;
+		}
+		gameMode = false;
+
+		AppStart();
+	}
+	else{
+		//Passar para o modo de jogo
+		glfwCloseWindow();
+
+		width = desktop.Width;
+		height = desktop.Height;
+
+		// open the window at the current Desktop resolution and colour depth
+		if (!glfwOpenWindow(
+			width,
+			height,
+			desktop.RedBits,
+			desktop.GreenBits,
+			desktop.BlueBits,
+			8,          // alpha bits
+			32,         // depth bits
+			0,          // stencil bits
+			GLFW_FULLSCREEN
+			)) {
 			std::cout << "Failed to open fullscreen window!" << std::endl;
 			glfwTerminate();
 			return GLFW_WINDOW_ERROR;
+		}
+		gameMode = true;
+
+		AppStart();
 	}
+}
 
+// Callback function to handle keypresses
+void handleKeypress(int theKey, int theAction)
+{
+	// If a key is pressed, toggle the relevant key-press flag
+	if (theAction == GLFW_PRESS)
+	{
+		switch (theKey)
+		{
+		case 'W':
+			cam->holdingForward = true;
+			break;
+		case 'S':
+			cam->holdingBackward = true;
+			break;
+		case 'A':
+			cam->holdingLeftStrafe = true;
+			break;
+		case 'D':
+			cam->holdingRightStrafe = true;
+			break;
+		case 'Q':
+			cam->holdingUp = true;
+			break;
+		case 'E':
+			cam->holdingDown = true;
+			break;
+		case 'M':
+		case 'm':
+			//Mudar o tipo de janela
+			changeGameModeActive = true;
+			break;
+		case GLFW_KEY_UP:
+			spinMode = true;
+			holdingMoreSimulationSpeed = true;
+			break;
+		case GLFW_KEY_DOWN:
+			holdingLessSimulationSpeed = true;
+			break;
+		default:
+			// Do nothing...
+			break;
+		}
+	}
+	else // If a key is released, toggle the relevant key-release flag
+	{
+		switch (theKey)
+		{
+		case 'W':
+			cam->holdingForward = false;
+			break;
+		case 'S':
+			cam->holdingBackward = false;
+			break;
+		case 'A':
+			cam->holdingLeftStrafe = false;
+			break;
+		case 'D':
+			cam->holdingRightStrafe = false;
+			break;
+		case 'Q':
+			cam->holdingUp = false;
+			break;
+		case 'E':
+			cam->holdingDown = false;
+			break;
+		case GLFW_KEY_UP:
+			holdingMoreSimulationSpeed = false;
+			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
+			break;
+		case GLFW_KEY_DOWN:
+			holdingLessSimulationSpeed = false;
+			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
+			break;
+		case 'R':
+		case 'r':
+			Key_r();
+			break;
+		case 'O':
+		case 'o':
+			drawOrbits = !drawOrbits;
+			break;
+		case 'M':
+		case 'm':
+			//Mudar o tipo de janela
+			if (changeGameModeActive){
+				changeWindowMode();
+				changeGameModeActive = false;
+			}
+			break;
+		case 'C':
+		case 'c':
+			//Tentativa de manter as posições, não funciona bem,
+			//teria que ser mais trabalhado.
 
+			/*if (arcCam){
+				cam->setPositionX(arcCamX);
+				cam->setPositionY(arcCamY);
+				cam->setPositionZ(arcCamZ);
+			}
+			else{
+				arcCamX = cam->getXPos();
+				arcCamY = cam->getYPos();
+				arcCamZ = cam->getZPos();
+			}*/
+			arcCamRadius = 100;
+			arcCam = !arcCam;
+			break;
+		case 27:	// tecla esc
+			exit(1);
+		default:
+			// Do nothing...
+			break;
+		}
+	}
+}
+
+void AppStart(){
 	// ----- GLFW Settings -----
 
 	glfwDisable(GLFW_MOUSE_CURSOR); // Hide the mouse cursor
@@ -800,7 +1084,7 @@ int main(int argc, char** argv)
 	// ----- Window and Projection Settings -----
 
 	// Set the window title
-	glfwSetWindowTitle("Solar System FPS Controls Mk2| r3dux.org | Dec 2012");
+	glfwSetWindowTitle("Solar System Model | PMarques / VGomes | April 2016");
 
 	// Setup our viewport to be the entire size of the window
 	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
@@ -811,6 +1095,7 @@ int main(int argc, char** argv)
 
 	OpenGLInit();
 
+<<<<<<< HEAD
 	glGenTextures(numeroPlanetas, textures);
 	
 	init();
@@ -823,6 +1108,27 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutIdleFunc(display);
+=======
+	//Fog
+	GLfloat fogColor[] = { 0.1, 0.1, 0.1, 1.0 };
+	// Activar o nevoeiro
+	glEnable(GL_FOG);
+	// Define a cor do nevoeiro
+	glFogfv(GL_FOG_COLOR, fogColor);
+	glFogi(GL_FOG_MODE, GL_EXP2);
+	glFogf(GL_FOG_DENSITY, 0.005f);
+
+	//Inicializar as display lists para estrelas e órbitas
+	displayListIndex = glGenLists(2);
+
+	glGenTextures(numeroPlanetas, textures);
+
+	initSistemaSolar();
+	//Gerar a displayList de órbitas de planetas
+	initPlanetOrbits();
+	initLights();
+	initEstrelas();
+>>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
 
 	
 	// Instantiate our pointer to a Camera object providing it the size of the window
@@ -840,6 +1146,9 @@ int main(int argc, char** argv)
 	// This allows us to perform framerate independent movement i.e. the camera will move at the same
 	// overall speed regardless of whether the app's running at (for example) 6fps, 60fps or 600fps!
 	double deltaTime = 0.0;
+
+	// Flag to keep our main loop running
+	bool running = true;
 
 	std::cout << "Running!" << std::endl;
 
@@ -867,6 +1176,56 @@ int main(int argc, char** argv)
 		
 
 	}
+}
+
+//rota principal
+int main(int argc, char** argv)
+{
+
+	//glutInit(&argc, argv);
+	//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_RGBA);
+	//glutInitWindowPosition(0, 0);
+	//glutCreateWindow("Sistema Solar");
+	////glutInitWindowSize(1080, 1080);
+	//glutFullScreen();
+
+	// Frame counter and window settings variables
+	int redBits = 8, greenBits = 8, blueBits = 8;
+	int alphaBits = 8, depthBits = 24, stencilBits = 0;
+
+	// Initialise GLFW
+	if (!glfwInit())
+	{
+		std::cout << "Failed to initialise GLFW!" << endl;
+		glfwTerminate();
+		return GLFW_INIT_ERROR;
+	}
+
+	// get the current Desktop screen resolution and colour depth
+	GLFWvidmode desktop;
+	glfwGetDesktopMode(&desktop);
+
+	width = desktop.Width;
+	height = desktop.Height;
+
+	// open the window at the current Desktop resolution and colour depth
+	if (!glfwOpenWindow(
+		desktop.Width,
+		desktop.Height,
+		desktop.RedBits,
+		desktop.GreenBits,
+		desktop.BlueBits,
+		8,          // alpha bits
+		32,         // depth bits
+		0,          // stencil bits
+		GLFW_FULLSCREEN
+		)) {
+			std::cout << "Failed to open fullscreen window!" << std::endl;
+			glfwTerminate();
+			return GLFW_WINDOW_ERROR;
+	}
+
+	AppStart();
 
 	// Clean up GLFW and exit
 	glfwTerminate();

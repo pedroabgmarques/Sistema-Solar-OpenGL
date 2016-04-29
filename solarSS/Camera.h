@@ -75,6 +75,10 @@ public:
 	float getYawSensitivity()              { return yawSensitivity; }
 	void  setYawSensitivity(float value)   { yawSensitivity = value; }
 
+	void setPositionX(float value)		   { position.setX(value); }
+	void setPositionY(float value)		   { position.setY(value); }
+	void setPositionZ(float value)		   { position.setZ(value); }
+
 	// Position getters
 	Vec3<double> getPosition() const { return position; }
 	double getXPos()           const { return position.getX(); }

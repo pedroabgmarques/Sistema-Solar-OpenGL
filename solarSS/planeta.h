@@ -15,13 +15,14 @@ class Planeta
 public:
 
 	void SetValues(float, float, float,float, GLuint);
-	void Draw(GLUquadric*);
+	void Draw(GLUquadric*, bool);
 	void Update(float);
 	float GetDistanciaSol();
 	float GetRaioPlaneta();
 	float GetX();
 	float GetY();
 	float GetZ();
+	GLuint Gettextura();
 
 
 

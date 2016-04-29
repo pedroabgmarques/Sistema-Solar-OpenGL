@@ -16,11 +16,13 @@ void Planeta::SetValues(float distanciaSol, float raioPlaneta, float rotacao,flo
 	_PeriodoOrbital = periodoOrbital;
 	_rotacaoAtual = 0;
 	_textura = textura;
-	x, y, z = 0;
+	x = distanciaSol;
+	y = 0;
+	z = distanciaSol;
 	iterator = 0;
 
 }
-void Planeta::Draw(GLUquadric *mysolid)
+void Planeta::Draw(GLUquadric *mysolid, bool minimap)
 {
 	
 
@@ -37,6 +39,9 @@ void Planeta::Draw(GLUquadric *mysolid)
 	//Endireitar os planetas
 	glRotatef(-90.0, 1.0, 0.0, 0.0);
 
+	if (minimap){
+		glScalef(8.0, 8, 8);
+	}
 	gluSphere(mysolid, _raioPlaneta, 64, 64);
 
 }
@@ -86,4 +91,8 @@ float Planeta::GetY(){
 
 float Planeta::GetZ(){
 	return z;
+}
+
+GLuint Planeta::Gettextura(){
+	return _textura;
 }
