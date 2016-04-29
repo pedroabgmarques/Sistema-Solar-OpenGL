@@ -3,6 +3,9 @@
 
 const double Camera::TO_RADS = 3.141592654 / 180.0; // The value of 1 degree in radians
 
+
+
+
 Camera::Camera(float theWindowWidth, float theWindowHeight)
 {
 	initCamera();
@@ -35,6 +38,12 @@ void Camera::initCamera()
 
 	pitchSensitivity = 0.2; // How sensitive mouse movements affect looking up and down
 	yawSensitivity = 0.2; // How sensitive mouse movements affect looking left and right
+
+	
+
+	
+
+
 
 	// To begin with, we aren't holding down any keys
 	holdingForward = false;

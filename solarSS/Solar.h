@@ -2,6 +2,7 @@
 void OpenGLInit(void);
 
 static void Animate(void);
+void renderscene(void);
 static void Key_r(void);
 static void Key_s(void);
 static void Key_up(void);
