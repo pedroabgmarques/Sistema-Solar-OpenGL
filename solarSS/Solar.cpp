@@ -454,6 +454,7 @@ void Animate(void)
 
 	glDisable(GL_LIGHTING);
 	glDisable(GL_FOG);
+	glColor3f(1.0, 1.0, 1.0);
 	//
 	// Z+ Face
 	// Selecciona textura
