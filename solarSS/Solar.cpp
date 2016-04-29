@@ -86,7 +86,7 @@ void handleMouseMove(int mouseX, int mouseY)
 	cam->handleMouseMove(mouseX, mouseY);
 }
 
-static void SpecialKeyFunc(int Key, int x, int y)
+void SpecialKeyFunc(int Key, int x, int y)
 {
 	switch (Key) {
 	case GLUT_KEY_UP:
@@ -98,22 +98,22 @@ static void SpecialKeyFunc(int Key, int x, int y)
 	}
 }
 
-static void Key_r(void)
+void Key_r(void)
 {
 	
 	spinMode = !spinMode;	// liga e desliga a animaçao
 	
 }
 
-static void Key_up(void)
+void Key_up(void)
 {
 }
 
-static void Key_down(void)
+void Key_down(void)
 {
 }
 
-static void initLights(void)
+void initLights(void)
 {
 	// Define a luz ambiente global
 	GLfloat global_ambient[] = { 0.05f, 0.05f, 0.05f, 1.0f };
@@ -248,9 +248,11 @@ void DrawPlanetas(bool minimap){
 		//Se é o sol, material emissive
 		if (i == 0){
 			applymaterial(3);
+			if(!minimap) glDisable(GL_FOG);
 		}
 		else{
 			applymaterial(0);
+			if (!minimap) glEnable(GL_FOG);
 		}
 
 		glPushMatrix();
@@ -330,6 +332,7 @@ void initEstrelas(){
 	}
 
 	glNewList(displayListIndex, GL_COMPILE);
+		glDisable(GL_FOG);
 		glDisable(GL_LIGHTING);
 		glBegin(GL_POINTS);
 		for (int i = 1; i < numeroEstrelas; i++)
@@ -339,10 +342,10 @@ void initEstrelas(){
 		}
 		glEnd();
 		glEnable(GL_LIGHTING);
+		glEnable(GL_FOG);
 		
 	glEndList();
 }
-
 
 //isto pode ou nao ser alterado
 void Animate(void)
@@ -435,8 +438,10 @@ void Animate(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glDisable(GL_LIGHTING);
+	glDisable(GL_FOG);
 	DrawCamera();
 	DrawPlanetas(true);
+	glEnable(GL_FOG);
 	glEnable(GL_LIGHTING);
 
 	glfwSwapBuffers(); // Swap the buffers to display the scene (so we don't have to watch it being drawn!)
@@ -467,7 +472,7 @@ void OpenGLInit(void)
 	glEnable(GL_DEPTH_TEST);
 }
 
-static void ResizeWindow(int w, int h)
+void ResizeWindow(int w, int h)
 {
 	windowWidth = w;
 	windowHeight = h;
@@ -799,6 +804,15 @@ void AppStart(){
 	glLoadIdentity();
 
 	OpenGLInit();
+
+	//Fog
+	GLfloat fogColor[] = { 0.1, 0.1, 0.1, 1.0 };
+	// Activar o nevoeiro
+	glEnable(GL_FOG);
+	// Define a cor do nevoeiro
+	glFogfv(GL_FOG_COLOR, fogColor);
+	glFogi(GL_FOG_MODE, GL_EXP2);
+	glFogf(GL_FOG_DENSITY, 0.005f);
 
 	//Inicializar as display lists para estrelas e órbitas
 	displayListIndex = glGenLists(2);
