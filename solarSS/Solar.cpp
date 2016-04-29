@@ -462,12 +462,10 @@ void Animate(void)
 
 	glDisable(GL_LIGHTING);
 	glDisable(GL_FOG);
-<<<<<<< HEAD
 	glColor3f(1, 1, 1);
 
-=======
-	glColor3f(1.0, 1.0, 1.0);
->>>>>>> 105e1011e3cd4478015f3835f40169116f6aea23
+
+
 	//
 	// Z+ Face
 	float rotate = 3.14;
