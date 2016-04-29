@@ -22,6 +22,7 @@ public:
 	float GetX();
 	float GetY();
 	float GetZ();
+	GLuint Gettextura();
 
 
 

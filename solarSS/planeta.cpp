@@ -16,7 +16,9 @@ void Planeta::SetValues(float distanciaSol, float raioPlaneta, float rotacao,flo
 	_PeriodoOrbital = periodoOrbital;
 	_rotacaoAtual = 0;
 	_textura = textura;
-	x, y, z = 0;
+	x = distanciaSol;
+	y = 0;
+	z = distanciaSol;
 	iterator = 0;
 
 }
@@ -89,4 +91,8 @@ float Planeta::GetY(){
 
 float Planeta::GetZ(){
 	return z;
+}
+
+GLuint Planeta::Gettextura(){
+	return _textura;
 }

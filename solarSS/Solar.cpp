@@ -51,15 +51,16 @@ float arcCamZ = 0;
 float arcCamRadius = 0;
 const int numeroEstrelas = 5000;
 
+//Estrelas
 struct ESTRELA
 {
 	Vec3<float> posicao;
 	float luminosity;
 };
-
 ESTRELA estrelas[numeroEstrelas];
 
-
+//Display Lists
+GLuint displayListIndex;
 
 //Camara
 Camera *cam;
@@ -210,7 +211,6 @@ void draworbit(float centerX, float centerY, float centerZ, GLint radius)
 {
 	//glDisable(GL_LIGHTING);
 	glBegin(GL_LINE_LOOP);
-
 	float x, z;
 
 	for (float i = 0; i<(3.14 * 2); i += (3.14 * 2) / 360)
@@ -224,9 +224,22 @@ void draworbit(float centerX, float centerY, float centerZ, GLint radius)
 
 		glNormal3f(normal.getX(), 0, normal.getZ());
 	}
-
 	glEnd();
 	//glEnable(GL_LIGHTING);
+}
+
+void initPlanetOrbits(){
+	glNewList(displayListIndex + 1, GL_COMPILE);
+	for (int i = 0; i < numeroPlanetas; i++){
+		glBindTexture(GL_TEXTURE_2D, sistemasolar[i].Gettextura());
+		draworbit(
+			sistemasolar[0].GetX(),
+			sistemasolar[0].GetY(),
+			sistemasolar[0].GetZ(),
+			sistemasolar[i].GetDistanciaSol()
+			);
+	}
+	glEndList();
 }
 
 void DrawPlanetas(bool minimap){
@@ -247,12 +260,7 @@ void DrawPlanetas(bool minimap){
 		glPopMatrix();
 
 		if ((drawOrbits && !minimap) || minimap){
-			draworbit(
-				sistemasolar[0].GetX(),
-				sistemasolar[0].GetY(),
-				sistemasolar[0].GetZ(),
-				sistemasolar[i].GetDistanciaSol()
-			);
+			glCallList(displayListIndex + 1);
 		}
 		
 		
@@ -320,25 +328,24 @@ void initEstrelas(){
 		estrelas[i].luminosity = ((double)rand() / (RAND_MAX));
 		estrelas[i].posicao = Vec3<float>(rand() % (max - min) + min, rand() % (max - min) + min, rand() % (max - min) + min);
 	}
+
+	glNewList(displayListIndex, GL_COMPILE);
+		glDisable(GL_LIGHTING);
+		glBegin(GL_POINTS);
+		for (int i = 1; i < numeroEstrelas; i++)
+		{
+			glColor3f(estrelas[i].luminosity, estrelas[i].luminosity, estrelas[i].luminosity);
+			glVertex3f(estrelas[i].posicao.getX(), estrelas[i].posicao.getY(), estrelas[i].posicao.getZ());
+		}
+		glEnd();
+		glEnable(GL_LIGHTING);
+		
+	glEndList();
 }
 
-void DrawStars(){
-	
-	glPushMatrix();
-	glDisable(GL_LIGHTING);
-	glBegin(GL_POINTS);
-	for (int i = 1; i < numeroEstrelas; i++)
-	{
-		glColor3f(estrelas[i].luminosity, estrelas[i].luminosity, estrelas[i].luminosity);
-		glVertex3f(estrelas[i].posicao.getX(), estrelas[i].posicao.getY(), estrelas[i].posicao.getZ());
-	}
-	glEnd();
-	glEnable(GL_LIGHTING);
-	glPopMatrix();
-}
 
 //isto pode ou nao ser alterado
-static void Animate(void)
+void Animate(void)
 {
 
 	// limpa a janela
@@ -401,10 +408,11 @@ static void Animate(void)
 	//Desenha os planetas, luas e estrelas
 	DrawPlanetas(false);
 	DrawLuas();
-	DrawStars();
+	
+	//Desenhar displayLists de estrelas
+	glCallList(displayListIndex);
 
-	// Draw on left side
-
+	// MINIMAP
 	float ratio;
 	// Prevenir a divisão por zero, se a janela for muito pequena
 	if (height == 0) height = 1;
@@ -792,8 +800,14 @@ void AppStart(){
 
 	OpenGLInit();
 
+	//Inicializar as display lists para estrelas e órbitas
+	displayListIndex = glGenLists(2);
+
 	glGenTextures(numeroPlanetas, textures);
+
 	initSistemaSolar();
+	//Gerar a displayList de órbitas de planetas
+	initPlanetOrbits();
 	initLights();
 	initEstrelas();
 
