@@ -741,7 +741,6 @@ void loadSkyboxTextures(void)
 	for (i = 0; i<6; i++) tgaDestroy(im2[i]);
 }
 
-
 int changeWindowMode(){
 
 	
