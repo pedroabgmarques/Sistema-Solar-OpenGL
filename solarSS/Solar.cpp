@@ -105,6 +105,12 @@ void init(void)
 
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	//Estas linhas impediam o openGL de desenhar as back faces, mas
+	//não pode ficar por causa de problemas com a skybox que já não temos tempo de resolver
+	//(quads desenhados ao contrário)
+	/*glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);*/
 }
 
 int changeWindowmode();
@@ -241,6 +247,7 @@ void UpdateLuas()
 void draworbit(float centerX, float centerY, float centerZ, GLint radius)
 {
 	//glDisable(GL_LIGHTING);
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINE_LOOP);
 	float x, z;
 
@@ -345,6 +352,7 @@ void DrawLuas()
 			sistemasolar[luas[i].GetPlaneta()].GetZ()
 			);
 
+		glDisable(GL_TEXTURE_2D);
 		if (drawOrbits){
 			draworbit(
 				posicaoPlaneta.getX(),
@@ -353,6 +361,7 @@ void DrawLuas()
 				luas[i].GetRaioOrbita()
 				);
 		}
+		glEnable(GL_TEXTURE_2D);
 
 	}
 }
@@ -1074,7 +1083,7 @@ int main(int argc, char** argv)
 		8,          // alpha bits
 		32,         // depth bits
 		0,          // stencil bits
-		GLFW_WINDOW
+		GLFW_FULLSCREEN
 		)) {
 			std::cout << "Failed to open fullscreen window!" << std::endl;
 			glfwTerminate();
