@@ -16,11 +16,9 @@
 #include <vector>
 #include "Camera.h"
 #include "FPSManager.hpp"
-<<<<<<< HEAD
 #include <windows.h>
-=======
 #include "Vec3.h"
->>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
+
 
 // Specify default namespace for commonly used elements
 using std::string;
@@ -53,7 +51,7 @@ float arcCamX = 0;
 float arcCamY = 0;
 float arcCamZ = 0;
 float arcCamRadius = 0;
-const int numeroEstrelas = 5000;
+const int numeroEstrelas = 25000;
 
 //Estrelas
 struct ESTRELA
@@ -84,18 +82,10 @@ const int numeroLuas = 3;
 Lua luas[numeroLuas];
 GLuint texturasLua[numeroLuas];
 
-<<<<<<< HEAD
 //skybox stuff
-void display(void);
-void funcmyDL(void);
-void reshape(GLsizei w, GLsizei h);
-void initDL(void);
-int myDL;
 tgaInfo *im2[6];
 float skyboxangle = 0.0;
 GLuint skyboxtextures[6];
-
-
 
 void init(void)
 {
@@ -108,138 +98,11 @@ void init(void)
 	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }
-void initDL(void)
-{
-	// Compila o modelo
-	funcmyDL();
-}
-void display(void)
-{
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glLoadIdentity();
+int changeWindowmode();
+void handleKeypress(int, int);
+void AppStart();
 
-	gluLookAt(1.0f, 1.0f, 5.0f,
-		0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f);
-
-	glRotatef(skyboxangle, 1.0f, 1.0f, 0.0f);
-	skyboxangle += 0.5f;
-	if (skyboxangle > 360.0) skyboxangle -= 360.0;
-
-	glEnable(GL_TEXTURE_2D);
-	// skybox
-	glCallList(myDL);
-	glDisable(GL_TEXTURE_2D);
-
-	glutSwapBuffers();
-
-	glFlush();
-}
-void reshape(GLsizei w, GLsizei h)
-{
-	glViewport(0, 0, w, h);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 0.5, 200.0);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef(0.0, 0.0, -5.0);
-}
-
-
-
-
-// Callback function to handle keypresses
-void handleKeypress(int theKey, int theAction)
-{
-	// If a key is pressed, toggle the relevant key-press flag
-	if (theAction == GLFW_PRESS)
-	{
-		switch (theKey)
-		{
-		case 'W':
-			cam->holdingForward = true;
-			break;
-		case 'S':
-			cam->holdingBackward = true;
-			break;
-		case 'A':
-			cam->holdingLeftStrafe = true;
-			break;
-		case 'D':
-			cam->holdingRightStrafe = true;
-			break;
-		case 'Q':
-			cam->holdingUp = true;
-			break;
-		case 'E':
-			cam->holdingDown = true;
-			break;
-		case GLFW_KEY_UP :
-			spinMode = true;
-			holdingMoreSimulationSpeed = true;
-			break;
-		case GLFW_KEY_DOWN:
-			holdingLessSimulationSpeed = true;
-			break;
-		default:
-			// Do nothing...
-			break;
-		}
-	}
-	else // If a key is released, toggle the relevant key-release flag
-	{
-		switch (theKey)
-		{
-		case 'W':
-			cam->holdingForward = false;
-			break;
-		case 'S':
-			cam->holdingBackward = false;
-			break;
-		case 'A':
-			cam->holdingLeftStrafe = false;
-			break;
-		case 'D':
-			cam->holdingRightStrafe = false;
-			break;
-		case 'Q':
-			cam->holdingUp = false;
-			break;
-		case 'E':
-			cam->holdingDown = false;
-			break;
-		case GLFW_KEY_UP:
-			holdingMoreSimulationSpeed = false;
-			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
-			break;
-		case GLFW_KEY_DOWN:
-			holdingLessSimulationSpeed = false;
-			simulationSpeedChangeAcceleration = simulationSpeedChangeAccelerationOriginal;
-			break;
-		case 'R':
-		case 'r':
-			Key_r();
-			break;
-		case 'O':
-		case 'o':
-			drawOrbits = !drawOrbits;
-			break;
-		case 27:	// tecla esc
-			exit(1);
-		default:
-			// Do nothing...
-			break;
-		}
-	}
-}
-
-=======
->>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
 // Callback function to handle mouse movements
 void handleMouseMove(int mouseX, int mouseY)
 {
@@ -424,13 +287,14 @@ void DrawPlanetas(bool minimap){
 		if ((drawOrbits && !minimap) || minimap){
 			glCallList(displayListIndex + 1);
 		}
-		
-		
-		
 	}
 }
 
 void DrawCamera(){
+	glDisable(GL_LIGHTING);
+	glDisable(GL_FOG);
+	glDisable(GL_TEXTURE_2D);
+	glColor3f(1.0, 1.0, 1.0);
 	glPushMatrix();
 	if (!arcCam){
 		glTranslatef(cam->getXPos(), 0, cam->getZPos());
@@ -450,6 +314,7 @@ void DrawCamera(){
 	glEnd();
 	glPopMatrix();
 	glColor3f(1.0, 1.0, 1.0);
+	glEnable(GL_TEXTURE_2D);
 }
 
 void DrawLuas()
@@ -463,6 +328,8 @@ void DrawLuas()
 		luas[i].Draw(mysolid);
 
 		glPopMatrix();
+
+		glColor3f(1.0, 1.0, 1.0);
 
 		Vec3<float> posicaoPlaneta = Vec3<float>(
 			sistemasolar[luas[i].GetPlaneta()].GetX(),
@@ -560,23 +427,85 @@ void Animate(void)
 
 	}
 
-	glEnable(GL_TEXTURE_2D);
-
 	applyLights();
 
 	//glViewport(0, 0, width, height);
 	glViewport(0, 0, width, height);
 	ResizeWindow(width, height);
 
+	glEnable(GL_TEXTURE_2D);
+
 	//Desenha os planetas, luas e estrelas
 	DrawPlanetas(false);
 	DrawLuas();
-<<<<<<< HEAD
-	funcmyDL();
-=======
-	
+
 	//Desenhar displayLists de estrelas
 	glCallList(displayListIndex);
+
+	//desenhar skybox
+	//glCallList(displayListIndex + 2);
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_FOG);
+	//
+	// Z+ Face
+	// Selecciona textura
+	glBindTexture(GL_TEXTURE_2D, skyboxtextures[0]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1000.0f, -1000.0f, 1000.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1000.0f, -1000.0f, 1000.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1000.0f, 1000.0f, 1000.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1000.0f, 1000.0f, 1000.0f);
+	glEnd();
+	// Z- Face
+	glBindTexture(GL_TEXTURE_2D, skyboxtextures[1]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1000.0f, -1000.0f, -1000.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1000.0f, -1000.0f, -1000.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1000.0f, 1000.0f, -1000.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1000.0f, 1000.0f, -1000.0f);
+	glEnd();
+	// X+ Face
+	glBindTexture(GL_TEXTURE_2D, skyboxtextures[2]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(1000.0f, -1000.0f, 1000.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1000.0f, -1000.0f, -1000.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1000.0f, 1000.0f, -1000.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(1000.0f, 1000.0f, 1000.0f);
+	glEnd();
+	// X- Face
+	glBindTexture(GL_TEXTURE_2D, skyboxtextures[3]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1000.0f, -1000.0f, -1000.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(-1000.0f, -1000.0f, 1000.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(-1000.0f, 1000.0f, 1000.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1000.0f, 1000.0f, -1000.0f);
+	glEnd();
+	// Y+ Face
+	glBindTexture(GL_TEXTURE_2D, skyboxtextures[4]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1000.0f, 1000.0f, 1000.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1000.0f, 1000.0f, 1000.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1000.0f, 1000.0f, -1000.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1000.0f, 1000.0f, -1000.0f);
+	glEnd();
+	// Y- Face
+	glBindTexture(GL_TEXTURE_2D, skyboxtextures[5]);
+	glBegin(GL_QUADS);
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-1000.0f, -1000.0f, 1000.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(1000.0f, -1000.0f, 1000.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(1000.0f, -1000.0f, -1000.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1000.0f, -1000.0f, -1000.0f);
+	glEnd();
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_FOG);
 
 	// MINIMAP
 	float ratio;
@@ -584,6 +513,7 @@ void Animate(void)
 	if (height == 0) height = 1;
 	ratio = 1.0 * width / height;
 	glViewport(width / 1.5, height / 1.5, width / 2, height / 2);
+	glClear(GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45, ratio, 1, 5000);
@@ -598,16 +528,14 @@ void Animate(void)
 	}
 	glTranslatef(offsetX, -150.0, 0.0);
 	gluLookAt(0.0, 1300, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -1.0);
+	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glDisable(GL_LIGHTING);
-	glDisable(GL_FOG);
+
 	DrawCamera();
 	DrawPlanetas(true);
-	glEnable(GL_FOG);
-	glEnable(GL_LIGHTING);
-
->>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
+	
+	
 	glfwSwapBuffers(); // Swap the buffers to display the scene (so we don't have to watch it being drawn!)
 
 }
@@ -766,89 +694,21 @@ void initSistemaSolar()
 	sistemasolar[8] = neptuno;
 }
 
-<<<<<<< HEAD
-//supostamente isto seleciona a textura
-void funcmyDL(void)
-{
-	
-
-	glColor4f(1.0f, 0.0f, 0.0f, 0.0f);
-
-	// Z+ Face
-	// Selecciona textura
-	glBindTexture(GL_TEXTURE_2D, skyboxtextures[0]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, 350.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, 350.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, 350.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, 350.0f);
-	glEnd();
-	// Z- Face
-	glBindTexture(GL_TEXTURE_2D, skyboxtextures[1]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, -350.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, -350.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, -350.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, -350.0f);
-	glEnd();
-	// X+ Face
-	glBindTexture(GL_TEXTURE_2D, skyboxtextures[2]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(350.0f, -350.0f, 350.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, -350.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, -350.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(350.0f, 350.0f, 350.0f);
-	glEnd();
-	// X- Face
-	glBindTexture(GL_TEXTURE_2D, skyboxtextures[3]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, -350.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(-350.0f, -350.0f, 350.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(-350.0f, 350.0f, 350.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, -350.0f);
-	glEnd();
-	// Y+ Face
-	glBindTexture(GL_TEXTURE_2D, skyboxtextures[4]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, 350.0f, 350.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, 350.0f, 350.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, -350.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, -350.0f);
-	glEnd();
-	// Y- Face
-	glBindTexture(GL_TEXTURE_2D, skyboxtextures[5]);
-	glBegin(GL_QUADS);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, 350.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, 350.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, -350.0f, -350.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, -350.0f, -350.0f);
-	glEnd();
-
-	glEndList();
-}
-
-void skybox(void )
+void loadSkyboxTextures(void)
 {
 
+	//printf("Skybox - load de texturas");
 
 	char *impathfile[6] = { "fundo.tga", "direita.tga", "esquerda.tga", "topo.tga", "frente.tga", "back.tga" };
 	int i;
-	
+
 	// Carrega as imagens de textura
 	for (i = 0; i<6; i++)
 	{
 		im2[i] = tgaLoad(impathfile[i]);
 
-		printf("IMAGE INFO: %s\nstatus: %d\ntype: %d\npixelDepth: %d\nsize%d x %d\n", impathfile[i], im2[i]->status, im2[i]->type, im2[i]->pixelDepth, im2[i]->width, im2[i]->height); fflush(stdout);
+		//printf("IMAGE INFO: %s\nstatus: %d\ntype: %d\npixelDepth: %d\nsize%d x %d\n", impathfile[i], im2[i]->status, im2[i]->type, im2[i]->pixelDepth, im2[i]->width, im2[i]->height); fflush(stdout);
 	}
-	
-	glGenTextures(6, skyboxtextures);
 
 	for (i = 0; i<6; i++)
 	{
@@ -858,48 +718,102 @@ void skybox(void )
 		// Selecciona a mistura da textura com a cor
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		// select modulate to mix texture with color for shading
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, im2[i]->width, im2[i]->height, GL_RGB, GL_UNSIGNED_BYTE, im2[i]->imageData);
-		// Se não tem mipmaps
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im2[i]->width, im2[i]->height, 0, GL_RGB, GL_UNSIGNED_BYTE, im2[i]->imageData);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // MIPMAP
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		// build our texture mipmaps
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, im2[i]->width, im2[i]->height, GL_RGB, GL_UNSIGNED_BYTE, im2[i]->imageData); // MIPMAP
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im2[i]->width, im2[i]->height, 0, GL_RGB, GL_UNSIGNED_BYTE, im2[i]->imageData);
 	}
 
 	// Destroi as imagens
 	for (i = 0; i<6; i++) tgaDestroy(im2[i]);
 }
 
-
-//rota 
-int main(int argc, char** argv)
+void initSkybox(void)
 {
 
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGBA);
-	glutInitWindowPosition(0, 0);
+	//printf("Inicialização da skybox..");
 
+	loadSkyboxTextures();
 
-	//glutInitWindowPosition(0, 0);
-	//glutCreateWindow("Sistema Solar");
-	//glutInitWindowSize(1080, 1080);
+	//glNewList(displayListIndex + 2, GL_COMPILE);
+	//	
+	//	glDisable(GL_FOG);
+	//	glDisable(GL_LIGHTING);
 
+	//	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-	// Frame counter and window settings variables
-	int redBits = 8, greenBits = 8, blueBits = 8;
-	int alphaBits = 8, depthBits = 24, stencilBits = 0;
-=======
-int changeWindowmode();
-void handleKeypress(int, int);
-void AppStart();
+	//	// Z+ Face
+	//	// Selecciona textura
+	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[0]);
+	//	glBegin(GL_QUADS);
+	//	glNormal3f(0.0f, 0.0f, 1.0f);
+	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, 350.0f);
+	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, 350.0f);
+	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, 350.0f);
+	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, 350.0f);
+	//	glEnd();
+	//	// Z- Face
+	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[1]);
+	//	glBegin(GL_QUADS);
+	//	glNormal3f(0.0f, 0.0f, 1.0f);
+	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, -350.0f);
+	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, -350.0f);
+	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, -350.0f);
+	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, -350.0f);
+	//	glEnd();
+	//	// X+ Face
+	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[2]);
+	//	glBegin(GL_QUADS);
+	//	glNormal3f(0.0f, 0.0f, 1.0f);
+	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(350.0f, -350.0f, 350.0f);
+	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, -350.0f);
+	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, -350.0f);
+	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(350.0f, 350.0f, 350.0f);
+	//	glEnd();
+	//	// X- Face
+	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[3]);
+	//	glBegin(GL_QUADS);
+	//	glNormal3f(0.0f, 0.0f, 1.0f);
+	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, -350.0f);
+	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(-350.0f, -350.0f, 350.0f);
+	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(-350.0f, 350.0f, 350.0f);
+	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, -350.0f);
+	//	glEnd();
+	//	// Y+ Face
+	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[4]);
+	//	glBegin(GL_QUADS);
+	//	glNormal3f(0.0f, 0.0f, 1.0f);
+	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, 350.0f, 350.0f);
+	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, 350.0f, 350.0f);
+	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, -350.0f);
+	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, -350.0f);
+	//	glEnd();
+	//	// Y- Face
+	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[5]);
+	//	glBegin(GL_QUADS);
+	//	glNormal3f(0.0f, 0.0f, 1.0f);
+	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, 350.0f);
+	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, 350.0f);
+	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, -350.0f, -350.0f);
+	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, -350.0f, -350.0f);
+	//	glEnd();
+
+	//	glEnable(GL_LIGHTING);
+	//	glEnable(GL_FOG);
+	//	
+	//glEndList();
+}
 
 int changeWindowMode(){
 
 	
 	glfwGetDesktopMode(&desktop);
->>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
 
 	if (gameMode){
 		//Passar para modo janela
@@ -1053,14 +967,14 @@ void handleKeypress(int theKey, int theAction)
 			//teria que ser mais trabalhado.
 
 			/*if (arcCam){
-				cam->setPositionX(arcCamX);
-				cam->setPositionY(arcCamY);
-				cam->setPositionZ(arcCamZ);
+			cam->setPositionX(arcCamX);
+			cam->setPositionY(arcCamY);
+			cam->setPositionZ(arcCamZ);
 			}
 			else{
-				arcCamX = cam->getXPos();
-				arcCamY = cam->getYPos();
-				arcCamZ = cam->getZPos();
+			arcCamX = cam->getXPos();
+			arcCamY = cam->getYPos();
+			arcCamZ = cam->getZPos();
 			}*/
 			arcCamRadius = 100;
 			arcCam = !arcCam;
@@ -1094,21 +1008,14 @@ void AppStart(){
 	glLoadIdentity();
 
 	OpenGLInit();
-
-<<<<<<< HEAD
-	glGenTextures(numeroPlanetas, textures);
-	
 	init();
-	initLights();
-	initDL();
-	initSistemaSolar();
+
+	glGenTextures(6, skyboxtextures);
+	glGenTextures(numeroPlanetas, textures);
+
+	//Inicializar as display lists para estrelas e órbitas
+	displayListIndex = glGenLists(3);
 	
-	
-	//isto e para a skybox
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutIdleFunc(display);
-=======
 	//Fog
 	GLfloat fogColor[] = { 0.1, 0.1, 0.1, 1.0 };
 	// Activar o nevoeiro
@@ -1118,19 +1025,14 @@ void AppStart(){
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogf(GL_FOG_DENSITY, 0.005f);
 
-	//Inicializar as display lists para estrelas e órbitas
-	displayListIndex = glGenLists(2);
-
-	glGenTextures(numeroPlanetas, textures);
-
+	initSkybox();
 	initSistemaSolar();
 	//Gerar a displayList de órbitas de planetas
 	initPlanetOrbits();
 	initLights();
 	initEstrelas();
->>>>>>> 517ef0bbf61a9d090523cadbfad06d39abc91772
-
 	
+
 	// Instantiate our pointer to a Camera object providing it the size of the window
 	cam = new Camera(windowWidth, windowHeight);
 
@@ -1158,23 +1060,14 @@ void AppStart(){
 		// Calculate our camera movement
 		cam->move(deltaTime);
 
-
-
 		// Draw our scene
 		Animate();
-		skybox();
 
 		// exit if ESC was pressed or window was closed
 		running = !glfwGetKey(GLFW_KEY_ESC) && glfwGetWindowParam(GLFW_OPENED);
-
-		//Camera getPosition();
 	
-
 		// Call our fpsManager to limit the FPS and get the frame duration to pass to the cam->move method
 		deltaTime = fpsManager.enforceFPS();
-
-		
-
 	}
 }
 

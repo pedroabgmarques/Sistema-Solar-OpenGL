@@ -40,7 +40,7 @@ void Planeta::Draw(GLUquadric *mysolid, bool minimap)
 	glRotatef(-90.0, 1.0, 0.0, 0.0);
 
 	if (minimap){
-		glScalef(8.0, 8, 8);
+		glScalef(8.0, 8.0, 8.0);
 	}
 	gluSphere(mysolid, _raioPlaneta, 64, 64);
 
