@@ -304,7 +304,7 @@ void DrawCamera(){
 		glTranslatef(arcCamX, arcCamY, arcCamZ);
 		glRotatef((arcCamAngle * 180) / PI, 0.0f, 1.0f, 0.0f);
 	}
-	
+
 	glBegin(GL_TRIANGLES);
 		glColor3f(0.0, 1.0, 0.0);
 		glVertex3f(0.0f, 0.0f, 0.0f);
@@ -441,6 +441,13 @@ void Animate(void)
 
 	//Desenhar displayLists de estrelas
 	glCallList(displayListIndex);
+
+	if (!arcCam){
+		glTranslatef(cam->getXPos(), 0, cam->getZPos());
+	}
+	else{
+		glTranslatef(arcCamX, arcCamY, arcCamZ);
+	}
 
 	//desenhar skybox
 	//glCallList(displayListIndex + 2);
@@ -734,81 +741,6 @@ void loadSkyboxTextures(void)
 	for (i = 0; i<6; i++) tgaDestroy(im2[i]);
 }
 
-void initSkybox(void)
-{
-
-	//printf("Inicialização da skybox..");
-
-	loadSkyboxTextures();
-
-	//glNewList(displayListIndex + 2, GL_COMPILE);
-	//	
-	//	glDisable(GL_FOG);
-	//	glDisable(GL_LIGHTING);
-
-	//	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-	//	// Z+ Face
-	//	// Selecciona textura
-	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[0]);
-	//	glBegin(GL_QUADS);
-	//	glNormal3f(0.0f, 0.0f, 1.0f);
-	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, 350.0f);
-	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, 350.0f);
-	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, 350.0f);
-	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, 350.0f);
-	//	glEnd();
-	//	// Z- Face
-	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[1]);
-	//	glBegin(GL_QUADS);
-	//	glNormal3f(0.0f, 0.0f, 1.0f);
-	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, -350.0f);
-	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, -350.0f);
-	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, -350.0f);
-	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, -350.0f);
-	//	glEnd();
-	//	// X+ Face
-	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[2]);
-	//	glBegin(GL_QUADS);
-	//	glNormal3f(0.0f, 0.0f, 1.0f);
-	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(350.0f, -350.0f, 350.0f);
-	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, -350.0f);
-	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, -350.0f);
-	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(350.0f, 350.0f, 350.0f);
-	//	glEnd();
-	//	// X- Face
-	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[3]);
-	//	glBegin(GL_QUADS);
-	//	glNormal3f(0.0f, 0.0f, 1.0f);
-	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, -350.0f);
-	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(-350.0f, -350.0f, 350.0f);
-	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(-350.0f, 350.0f, 350.0f);
-	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, -350.0f);
-	//	glEnd();
-	//	// Y+ Face
-	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[4]);
-	//	glBegin(GL_QUADS);
-	//	glNormal3f(0.0f, 0.0f, 1.0f);
-	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, 350.0f, 350.0f);
-	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, 350.0f, 350.0f);
-	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, 350.0f, -350.0f);
-	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, 350.0f, -350.0f);
-	//	glEnd();
-	//	// Y- Face
-	//	glBindTexture(GL_TEXTURE_2D, skyboxtextures[5]);
-	//	glBegin(GL_QUADS);
-	//	glNormal3f(0.0f, 0.0f, 1.0f);
-	//	glTexCoord2f(0.0f, 0.0f); glVertex3f(-350.0f, -350.0f, 350.0f);
-	//	glTexCoord2f(1.0f, 0.0f); glVertex3f(350.0f, -350.0f, 350.0f);
-	//	glTexCoord2f(1.0f, 1.0f); glVertex3f(350.0f, -350.0f, -350.0f);
-	//	glTexCoord2f(0.0f, 1.0f); glVertex3f(-350.0f, -350.0f, -350.0f);
-	//	glEnd();
-
-	//	glEnable(GL_LIGHTING);
-	//	glEnable(GL_FOG);
-	//	
-	//glEndList();
-}
 
 int changeWindowMode(){
 
@@ -1025,7 +957,7 @@ void AppStart(){
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogf(GL_FOG_DENSITY, 0.005f);
 
-	initSkybox();
+	loadSkyboxTextures();
 	initSistemaSolar();
 	//Gerar a displayList de órbitas de planetas
 	initPlanetOrbits();
