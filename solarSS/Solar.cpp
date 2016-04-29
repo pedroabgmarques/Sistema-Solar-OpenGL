@@ -454,8 +454,11 @@ void Animate(void)
 
 	glDisable(GL_LIGHTING);
 	glDisable(GL_FOG);
+	glColor3f(1, 1, 1);
+
 	//
 	// Z+ Face
+	float rotate = 3.14;
 	// Selecciona textura
 	glBindTexture(GL_TEXTURE_2D, skyboxtextures[0]);
 	glBegin(GL_QUADS);
@@ -706,7 +709,7 @@ void loadSkyboxTextures(void)
 
 	//printf("Skybox - load de texturas");
 
-	char *impathfile[6] = { "textures/fundo.tga", "textures/direita.tga", "textures/esquerda.tga", "textures/topo.tga", "textures/frente.tga", "textures/back.tga" };
+	char *impathfile[6] = { "textures/front.tga", "textures/back.tga", "textures/right.tga", "textures/left.tga", "textures/top.tga", "textures/bottom.tga" };
 	int i;
 
 	// Carrega as imagens de textura
