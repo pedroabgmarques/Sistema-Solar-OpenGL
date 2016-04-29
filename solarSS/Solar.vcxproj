@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="FPSManager.hpp" />
+    <ClInclude Include="glext.h" />
     <ClInclude Include="lua.h" />
     <ClInclude Include="planeta.h" />
     <ClInclude Include="Solar.h" />

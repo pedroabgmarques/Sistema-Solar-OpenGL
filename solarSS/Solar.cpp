@@ -4,6 +4,7 @@
 #define GL_MULTISAMPLE_ARB  0x809D
 #endif
 #define PI 3.14159265
+#define GL_CLAMP_TO_EDGE 0x812F
 
 #include "Solar.h"   
 #include <stdlib.h> 
@@ -18,6 +19,7 @@
 #include "FPSManager.hpp"
 #include <windows.h>
 #include "Vec3.h"
+#include "glext.h"
 
 
 // Specify default namespace for commonly used elements
@@ -64,6 +66,9 @@ ESTRELA estrelas[numeroEstrelas];
 //Display Lists
 GLuint displayListIndex;
 
+//Textura dos anéis
+GLuint texturaAneis;
+
 //Camara
 Camera *cam;
 
@@ -86,6 +91,9 @@ GLuint texturasLua[numeroLuas];
 tgaInfo *im2[6];
 float skyboxangle = 0.0;
 GLuint skyboxtextures[6];
+
+//Anéis
+
 
 void init(void)
 {
@@ -454,8 +462,12 @@ void Animate(void)
 
 	glDisable(GL_LIGHTING);
 	glDisable(GL_FOG);
+<<<<<<< HEAD
 	glColor3f(1, 1, 1);
 
+=======
+	glColor3f(1.0, 1.0, 1.0);
+>>>>>>> 105e1011e3cd4478015f3835f40169116f6aea23
 	//
 	// Z+ Face
 	float rotate = 3.14;
@@ -517,6 +529,19 @@ void Animate(void)
 	glEnable(GL_LIGHTING);
 	glEnable(GL_FOG);
 
+	//Aneis de Saturno
+	glBindTexture(GL_TEXTURE_2D, texturaAneis);
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glColor4f(0.0, 0.0, 0.0, 0.0);
+	glNormal3f(1.0f, 0.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(-50.0f, -50.0f, 50.0f);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(50.0f, -50.0f, 50.0f);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(50.0f, 50.0f, 50.0f);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(-50.0f, 50.0f, 50.0f);
+	glEnd();
+	glPopMatrix();
+
 	// MINIMAP
 	float ratio;
 	// Prevenir a divisão por zero, se a janela for muito pequena
@@ -544,7 +569,6 @@ void Animate(void)
 
 	DrawCamera();
 	DrawPlanetas(true);
-	
 	
 	glfwSwapBuffers(); // Swap the buffers to display the scene (so we don't have to watch it being drawn!)
 
@@ -596,7 +620,7 @@ void ResizeWindow(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void load_tga_image(std::string nome, GLuint texture)
+void load_tga_image(std::string nome, GLuint texture, bool transparency)
 {
 	std::string impathfile = "textures/" + nome + ".tga";
 
@@ -625,8 +649,15 @@ void load_tga_image(std::string nome, GLuint texture)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// build our texture mipmaps
-	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, im->width, im->height, GL_RGB, GL_UNSIGNED_BYTE, im->imageData); // MIPMAP
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im->width, im->height, 0, GL_RGB, GL_UNSIGNED_BYTE, im->imageData);
+	if (!transparency){
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, im->width, im->height, GL_RGB, GL_UNSIGNED_BYTE, im->imageData); // MIPMAP
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im->width, im->height, 0, GL_RGB, GL_UNSIGNED_BYTE, im->imageData);
+	}
+	else{
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, im->width, im->height, GL_RGB, GL_UNSIGNED_BYTE, im->imageData); // MIPMAP
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im->width, im->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, im->imageData);
+	}
+	
 
 	// Destroi a imagem
 	tgaDestroy(im);
@@ -647,60 +678,63 @@ void initSistemaSolar()
 
 	Planeta sol;
 	sol.SetValues(0, 1, 0.01, 1, textures[0]);
-	load_tga_image("sun", textures[0]);
+	load_tga_image("sun", textures[0], false);
 	sistemasolar[0] = sol;
 
 	Planeta mercurio;
 	mercurio.SetValues(4, 0.0035 * escalapp, 0, 1.2, textures[1]);
-	load_tga_image("mercury", textures[1]);
+	load_tga_image("mercury", textures[1], false);
 	sistemasolar[1] = mercurio;
 
 	Planeta venus;
 	venus.SetValues(7, 0.0087 * escalapp, 0, 1.6, textures[2]);
-	load_tga_image("venus", textures[2]);
+	load_tga_image("venus", textures[2], false);
 	sistemasolar[2] = venus;
 
 	Planeta terra;
 	terra.SetValues(10, 0.0092*escalapp, 0.00365, 1, textures[3]);
-	load_tga_image("earth", textures[3]);
+	load_tga_image("earth", textures[3], false);
 	sistemasolar[3] = terra;
 
-	Lua lua;
-	lua.SetValues(1, 0.0092*escalapp / 2, 0.00365, 0.01, textures[9],3);
-	load_tga_image("moon", textures[9]);
-	luas[0] = lua;
+		Lua lua;
+		lua.SetValues(1, 0.0092*escalapp / 2, 0.00365, 0.01, textures[9],3);
+		load_tga_image("moon", textures[9], false);
+		luas[0] = lua;
 
 	Planeta marte;
 	marte.SetValues(16, 0.0049*escalapp, 0, 2.9, textures[4]);
-	load_tga_image("mars", textures[4]);
+	load_tga_image("mars", textures[4], false);
 	sistemasolar[4] = marte;
 
 	Planeta jupiter;
 	jupiter.SetValues(55, 0.1004*escalapg, 0, 12.9, textures[5]);
-	load_tga_image("jupiter", textures[5]);
+	load_tga_image("jupiter", textures[5], false);
 	sistemasolar[5] = jupiter;
 
-	Lua jupiter1;
-	jupiter1.SetValues(2, 0.0092*escalapp / 2, 0.00365, 0.005, textures[3], 5);		
-	luas[1] = jupiter1;
+		//Aneis
+		load_tga_image("rings", texturaAneis, true);
 
-	Lua jupiter2;
-	jupiter1.SetValues(4, 0.0092*escalapp / 2, 0.00365, 0.01, textures[3], 5);
-	luas[2] = jupiter1;
+		Lua jupiter1;
+		jupiter1.SetValues(2, 0.0092*escalapp / 2, 0.00365, 0.005, textures[3], 5);		
+		luas[1] = jupiter1;
+
+		Lua jupiter2;
+		jupiter1.SetValues(4, 0.0092*escalapp / 2, 0.00365, 0.01, textures[3], 5);
+		luas[2] = jupiter1;
 
 	Planeta saturno;
 	saturno.SetValues(102, 0.08369*escalapg, 0, 30.5, textures[6]);
-	load_tga_image("saturn", textures[6]);
+	load_tga_image("saturn", textures[6], false);
 	sistemasolar[6] = saturno;
 
 	Planeta urano;
 	urano.SetValues(206, 0.03644*escalapp, 0, 85.0, textures[7]);
-	load_tga_image("uranus", textures[7]);
+	load_tga_image("uranus", textures[7], false);
 	sistemasolar[7] = urano;
 
 	Planeta neptuno;
 	neptuno.SetValues(323, 0.03538*escalapp, 0, 165.8, textures[8]);
-	load_tga_image("neptune", textures[8]);
+	load_tga_image("neptune", textures[8], false);
 	sistemasolar[8] = neptuno;
 }
 
@@ -726,10 +760,7 @@ void loadSkyboxTextures(void)
 		glBindTexture(GL_TEXTURE_2D, skyboxtextures[i]);
 
 		// Selecciona a mistura da textura com a cor
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-		// select modulate to mix texture with color for shading
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_CLAMP_TO_EDGE);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // MIPMAP
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -737,7 +768,8 @@ void loadSkyboxTextures(void)
 
 		// build our texture mipmaps
 		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, im2[i]->width, im2[i]->height, GL_RGB, GL_UNSIGNED_BYTE, im2[i]->imageData); // MIPMAP
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im2[i]->width, im2[i]->height, 0, GL_RGB, GL_UNSIGNED_BYTE, im2[i]->imageData);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, im2[i]->width, im2[i]->height, 0, GL_RGB, GL_UNSIGNED_BYTE, im2[i]->imageData);
+
 	}
 
 	// Destroi as imagens
@@ -1045,7 +1077,7 @@ int main(int argc, char** argv)
 		8,          // alpha bits
 		32,         // depth bits
 		0,          // stencil bits
-		GLFW_FULLSCREEN
+		GLFW_WINDOW
 		)) {
 			std::cout << "Failed to open fullscreen window!" << std::endl;
 			glfwTerminate();

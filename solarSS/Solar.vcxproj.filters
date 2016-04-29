@@ -53,5 +53,8 @@
     <ClInclude Include="lua.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="glext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
