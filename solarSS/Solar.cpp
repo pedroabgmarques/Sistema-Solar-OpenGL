@@ -4,6 +4,7 @@
 #define GL_MULTISAMPLE_ARB  0x809D
 #endif
 #define PI 3.14159265
+#define GL_CLAMP_TO_EDGE 0x812F
 
 #include "Solar.h"   
 #include <stdlib.h> 
@@ -18,6 +19,7 @@
 #include "FPSManager.hpp"
 #include <windows.h>
 #include "Vec3.h"
+#include "glext.h"
 
 
 // Specify default namespace for commonly used elements
@@ -724,10 +726,7 @@ void loadSkyboxTextures(void)
 		glBindTexture(GL_TEXTURE_2D, skyboxtextures[i]);
 
 		// Selecciona a mistura da textura com a cor
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-
-		// select modulate to mix texture with color for shading
-		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_CLAMP_TO_EDGE);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // MIPMAP
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -736,6 +735,7 @@ void loadSkyboxTextures(void)
 		// build our texture mipmaps
 		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, im2[i]->width, im2[i]->height, GL_RGB, GL_UNSIGNED_BYTE, im2[i]->imageData); // MIPMAP
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im2[i]->width, im2[i]->height, 0, GL_RGB, GL_UNSIGNED_BYTE, im2[i]->imageData);
+
 	}
 
 	// Destroi as imagens
