@@ -706,7 +706,7 @@ void loadSkyboxTextures(void)
 
 	//printf("Skybox - load de texturas");
 
-	char *impathfile[6] = { "fundo.tga", "direita.tga", "esquerda.tga", "topo.tga", "frente.tga", "back.tga" };
+	char *impathfile[6] = { "textures/fundo.tga", "textures/direita.tga", "textures/esquerda.tga", "textures/topo.tga", "textures/frente.tga", "textures/back.tga" };
 	int i;
 
 	// Carrega as imagens de textura
