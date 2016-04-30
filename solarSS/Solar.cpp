@@ -473,9 +473,26 @@ void Animate(void)
 
 	glDisable(GL_LIGHTING);
 	glDisable(GL_FOG);
+<<<<<<< HEAD
+<<<<<<< HEAD
+	glColor3f(1, 1, 1);
+
+=======
+>>>>>>> 208cd4d66d038e28c42755e46cc986878cb73989
 
 	glColor3f(1, 1, 1);
 
+<<<<<<< HEAD
+	//
+	// Z+ Face
+	float rotate = 3.14;
+=======
+
+	glColor3f(1, 1, 1);
+
+>>>>>>> 642586cd94ceb72e70740e8bd61b6ddcf62f526f
+=======
+>>>>>>> 208cd4d66d038e28c42755e46cc986878cb73989
 	// Selecciona textura
 	glBindTexture(GL_TEXTURE_2D, skyboxtextures[0]);
 	glBegin(GL_QUADS);
