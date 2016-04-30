@@ -9,15 +9,13 @@
 #include "Solar.h"   
 #include <stdlib.h> 
 #include <stdio.h>
-#include "gl/glut.h"
-#include "GL/glfw.h"
+#include "gl/glfw.h"
 #include "lua.h"
 #include "tga.h"
 #include <string>
 #include <vector>
 #include "Camera.h"
 #include "FPSManager.hpp"
-#include <windows.h>
 #include "Vec3.h"
 #include "glext.h"
 
@@ -1111,6 +1109,3 @@ int main(int argc, char** argv)
 	return 0;
 }
 #pragma endregion
-
-
-

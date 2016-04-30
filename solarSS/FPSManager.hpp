@@ -7,6 +7,7 @@ http://r3dux.org/2012/12/fpsmanager-a-c-helper-class-for-framerate-independent-m
 #include <sstream>
 #include <iostream>
 
+
 #ifndef __glfw_h_
 #include "GL/glfw.h" // We need GLFW for this, so let's check for it- although it'd be a doddle to convert to non-GLFW using code.
 #endif
