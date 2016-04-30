@@ -450,6 +450,8 @@ void Animate(void)
 	//Desenhar displayLists de estrelas
 	glCallList(displayListIndex);
 
+	glPushMatrix();
+
 	if (!arcCam){
 		glTranslatef(cam->getXPos(), 0, cam->getZPos());
 	}
@@ -462,6 +464,7 @@ void Animate(void)
 
 	glDisable(GL_LIGHTING);
 	glDisable(GL_FOG);
+<<<<<<< HEAD
 	glColor3f(1, 1, 1);
 
 
@@ -469,6 +472,11 @@ void Animate(void)
 	//
 	// Z+ Face
 	float rotate = 3.14;
+=======
+
+	glColor3f(1, 1, 1);
+
+>>>>>>> 642586cd94ceb72e70740e8bd61b6ddcf62f526f
 	// Selecciona textura
 	glBindTexture(GL_TEXTURE_2D, skyboxtextures[0]);
 	glBegin(GL_QUADS);
@@ -524,21 +532,22 @@ void Animate(void)
 	glTexCoord2f(0.0f, 1.0f); glVertex3f(-1000.0f, -1000.0f, -1000.0f);
 	glEnd();
 
+	glPopMatrix();
+
+	
 	glEnable(GL_LIGHTING);
 	glEnable(GL_FOG);
-
 	//Aneis de Saturno
 	glBindTexture(GL_TEXTURE_2D, texturaAneis);
-	glPushMatrix();
+	float raioAneis = 10;
 	glBegin(GL_QUADS);
-	glColor4f(0.0, 0.0, 0.0, 0.0);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glNormal3f(1.0f, 0.0f, 0.0f);
-	glTexCoord2f(0.0f, 0.0f); glVertex3f(-50.0f, -50.0f, 50.0f);
-	glTexCoord2f(1.0f, 0.0f); glVertex3f(50.0f, -50.0f, 50.0f);
-	glTexCoord2f(1.0f, 1.0f); glVertex3f(50.0f, 50.0f, 50.0f);
-	glTexCoord2f(0.0f, 1.0f); glVertex3f(-50.0f, 50.0f, 50.0f);
+	glTexCoord2f(0.0f, 0.0f); glVertex3f(sistemasolar[6].GetX() - raioAneis, sistemasolar[6].GetY(), sistemasolar[6].GetZ() + raioAneis);
+	glTexCoord2f(1.0f, 0.0f); glVertex3f(sistemasolar[6].GetX() + raioAneis, sistemasolar[6].GetY(), sistemasolar[6].GetZ() + raioAneis);
+	glTexCoord2f(1.0f, 1.0f); glVertex3f(sistemasolar[6].GetX() + raioAneis, sistemasolar[6].GetY(), sistemasolar[6].GetZ() - raioAneis);
+	glTexCoord2f(0.0f, 1.0f); glVertex3f(sistemasolar[6].GetX() - raioAneis, sistemasolar[6].GetY(), sistemasolar[6].GetZ() - raioAneis);
 	glEnd();
-	glPopMatrix();
 
 	// MINIMAP
 	float ratio;
